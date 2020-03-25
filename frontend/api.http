@@ -1,0 +1,25 @@
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/source
+
+###
+GET http://localhost:8080/books
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{ "text": "Hello world!" }
+
+###
+GET http://localhost:8080/books/:id
+
+###
+PUT http://localhost:8080/books/:id
+Content-Type: application/json
+
+{ "text": "Hi world!" }
+
+###
+DELETE http://localhost:8080/books/:id
