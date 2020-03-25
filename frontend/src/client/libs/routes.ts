@@ -6,6 +6,5 @@ type router = {
 }
 
 export const
-  main: router = { path: '/:filter?' },
-  hook: router = { path: '/hook' },
-  noHook: router = { path: '/nohook' };
+  main: router = { path: '/', exact: true },
+  bookForm: router = { path: '/books/:id?' };

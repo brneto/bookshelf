@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import globalStyle, * as themes from '../libs/style';
 import * as routes from '../libs/routes';
-import App from './App';
+import MainPage from './MainPage';
 
 const
   propTypes = {
@@ -23,7 +23,8 @@ const
         <Provider store={store}>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route {...routes.main} component={App} />
+              <Route {...routes.main} component={MainPage} />
+              <Route {...routes.bookForm} component={MainPage} />
             </Switch>
           </ConnectedRouter>
         </Provider>
