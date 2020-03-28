@@ -76,6 +76,10 @@ class BookshelfApplicationTests {
     // given
     Book book = new Book()
         .setTitle("Call of the wild")
+        .setAuthor("Jack London")
+        .setPublisher("Sterling Children's Books")
+        .setPages(56)
+        .setLanguage("English")
         .setDescription(
             "Here is the ultimate dog story, one filled with "
             + "emotion, adventure, and excitement. During the Gold Rush, "
@@ -98,6 +102,18 @@ class BookshelfApplicationTests {
     then(responseJson)
         .extractingJsonPathStringValue("@.title")
         .isEqualTo(book.getTitle());
+    then(responseJson)
+        .extractingJsonPathStringValue("@.author")
+        .isEqualTo(book.getAuthor());
+    then(responseJson)
+        .extractingJsonPathStringValue("@.publisher")
+        .isEqualTo(book.getPublisher());
+    then(responseJson)
+        .extractingJsonPathNumberValue("@.pages")
+        .isEqualTo(book.getPages());
+    then(responseJson)
+        .extractingJsonPathStringValue("@.language")
+        .isEqualTo(book.getLanguage());
     then(responseJson)
         .extractingJsonPathStringValue("@.description")
         .isEqualTo(book.getDescription());
@@ -146,6 +162,10 @@ class BookshelfApplicationTests {
     // then
     then(responseStatus).isEqualTo(OK);
     then(responseJson).extractingJsonPathStringValue("@.title").isEqualTo(bookTitle);
+    then(responseJson).extractingJsonPathStringValue("@.author").isNotEmpty();
+    then(responseJson).extractingJsonPathStringValue("@.publisher").isNotEmpty();
+    then(responseJson).extractingJsonPathNumberValue("@.pages").isNotNull();
+    then(responseJson).extractingJsonPathStringValue("@.language").isNotEmpty();
     then(responseJson).extractingJsonPathStringValue("@.description").isNotEmpty();
   }
 
@@ -169,6 +189,10 @@ class BookshelfApplicationTests {
     // then
     then(responseStatus).isEqualTo(OK);
     then(responseJson).extractingJsonPathStringValue("@.title").isEqualTo(bookTitle);
+    then(responseJson).extractingJsonPathStringValue("@.author").isNull();
+    then(responseJson).extractingJsonPathStringValue("@.publisher").isNull();
+    then(responseJson).extractingJsonPathNumberValue("@.pages").isNull();
+    then(responseJson).extractingJsonPathStringValue("@.language").isNull();
     then(responseJson).extractingJsonPathStringValue("@.description").isNull();
   }
 
