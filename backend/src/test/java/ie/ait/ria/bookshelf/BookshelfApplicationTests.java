@@ -10,28 +10,22 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import ie.ait.ria.bookshelf.model.Book;
 import ie.ait.ria.bookshelf.repository.BookRepository;
 import java.net.URI;
+import java.util.Collection;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.json.BasicJsonTester;
-import org.springframework.boot.test.json.JsonContent;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import sun.net.www.http.HttpClient;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureJsonTesters
 @TestMethodOrder(OrderAnnotation.class)
 class BookshelfApplicationTests {
 
@@ -41,9 +35,18 @@ class BookshelfApplicationTests {
   @Autowired
   private TestRestTemplate restTemplate;
 
-
-  @Autowired
-  private BasicJsonTester jsonTester;
+  private final Book book = new Book()
+      .setTitle("Call of the wild")
+      .setAuthor("Jack London")
+      .setPublisher("Sterling Children's Books")
+      .setPages(56)
+      .setLanguage("English")
+      .setDescription(
+          "Here is the ultimate dog story, one filled with "
+              + "emotion, adventure, and excitement. During the Gold Rush, "
+              + "Buck is snatched away from his peaceful home and brought to the "
+              + "harsh and bitter Yukon to become a sled dog."
+      );
 
   @Test @Order(1)
   void shouldContextLoads(@Autowired BookRepository bookRepository) {
@@ -59,66 +62,39 @@ class BookshelfApplicationTests {
         .build();
 
     // when
-    ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+    ResponseEntity<CollectionModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<CollectionModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    JsonContent<Object> responseJson = jsonTester.from(response.getBody());
+    Collection<Book> responseContent = response.getBody().getContent();
 
     // then
-    then(responseStatus)
-        .isEqualTo(OK);
-    then(responseJson)
-        .extractingJsonPathArrayValue("@._embedded.books")
-        .hasSize(0);
+    then(responseStatus).isEqualTo(OK);
+    then(responseContent).isEmpty();
   }
 
   @Test @Order(3)
   void shouldCreateABookWithPost() {
     // given
-    Book book = new Book()
-        .setTitle("Call of the wild")
-        .setAuthor("Jack London")
-        .setPublisher("Sterling Children's Books")
-        .setPages(56)
-        .setLanguage("English")
-        .setDescription(
-            "Here is the ultimate dog story, one filled with "
-            + "emotion, adventure, and excitement. During the Gold Rush, "
-            + "Buck is snatched away from his peaceful home and brought to the "
-            + "harsh and bitter Yukon to become a sled dog."
-        );
     RequestEntity<Book> request = RequestEntity
         .post(baseUrl)
         .accept(APPLICATION_JSON)
         .body(book);
 
     // when
-    ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+    ResponseEntity<EntityModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    JsonContent<Object> responseJson = jsonTester.from(response.getBody());
+    Book responseContent = response.getBody().getContent();
 
     // then
-    then(responseStatus)
-        .isEqualTo(CREATED);
-    then(responseJson)
-        .extractingJsonPathStringValue("@.title")
-        .isEqualTo(book.getTitle());
-    then(responseJson)
-        .extractingJsonPathStringValue("@.author")
-        .isEqualTo(book.getAuthor());
-    then(responseJson)
-        .extractingJsonPathStringValue("@.publisher")
-        .isEqualTo(book.getPublisher());
-    then(responseJson)
-        .extractingJsonPathNumberValue("@.pages")
-        .isEqualTo(book.getPages());
-    then(responseJson)
-        .extractingJsonPathStringValue("@.language")
-        .isEqualTo(book.getLanguage());
-    then(responseJson)
-        .extractingJsonPathStringValue("@.description")
-        .isEqualTo(book.getDescription());
-    then(responseJson)
-        .hasJsonPath("@._links.book");
+    then(responseStatus).isEqualTo(CREATED);
+    then(responseContent.getTitle()).isEqualTo(book.getTitle());
+    then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
+    then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
+    then(responseContent.getPages()).isEqualTo(book.getPages());
+    then(responseContent.getLanguage()).isEqualTo(book.getLanguage());
+    then(responseContent.getDescription()).isEqualTo(book.getDescription());
+    then(response.getBody().getLinks().hasLink("book")).isTrue();
   }
 
   @Test @Order(4)
@@ -130,16 +106,14 @@ class BookshelfApplicationTests {
         .build();
 
     // when
-    ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+    ResponseEntity<CollectionModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<CollectionModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    JsonContent<Object> responseJson = jsonTester.from(response.getBody());
+    Collection<Book> responseContent = response.getBody().getContent();
 
     // then
-    then(responseStatus)
-        .isEqualTo(OK);
-    then(responseJson)
-        .extractingJsonPathArrayValue("@._embedded.books")
-        .hasSize(1);
+    then(responseStatus).isEqualTo(OK);
+    then(responseContent).isNotEmpty();
   }
 
   @Test @Order(5)
@@ -148,6 +122,7 @@ class BookshelfApplicationTests {
     String bookId = "1";
     String bookTitle = "The call of the wild";
     String requestJson = String.format("{\"id\":%s,\"title\":\"%s\"}", bookId, bookTitle);
+
     RequestEntity<String> request = RequestEntity
         .patch(baseUrl.resolve(bookId))
         .contentType(APPLICATION_JSON)
@@ -155,18 +130,20 @@ class BookshelfApplicationTests {
         .body(requestJson);
 
     // when
-    ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+    ResponseEntity<EntityModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    JsonContent<Object> responseJson = jsonTester.from(response.getBody());
+    Book responseContent = response.getBody().getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
-    then(responseJson).extractingJsonPathStringValue("@.title").isEqualTo(bookTitle);
-    then(responseJson).extractingJsonPathStringValue("@.author").isNotEmpty();
-    then(responseJson).extractingJsonPathStringValue("@.publisher").isNotEmpty();
-    then(responseJson).extractingJsonPathNumberValue("@.pages").isNotNull();
-    then(responseJson).extractingJsonPathStringValue("@.language").isNotEmpty();
-    then(responseJson).extractingJsonPathStringValue("@.description").isNotEmpty();
+    then(responseContent.getTitle()).isEqualTo(bookTitle);
+    then(responseContent.getTitle()).isNotEqualTo(book.getAuthor());
+    then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
+    then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
+    then(responseContent.getPages()).isEqualTo(book.getPages());
+    then(responseContent.getLanguage()).isEqualTo(book.getLanguage());
+    then(responseContent.getDescription()).isEqualTo(book.getDescription());
   }
 
   @Test @Order(6)
@@ -182,18 +159,19 @@ class BookshelfApplicationTests {
         .body(requestJson);
 
     // when
-    ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+    ResponseEntity<EntityModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    JsonContent<Object> responseJson = jsonTester.from(response.getBody());
+    Book responseContent = response.getBody().getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
-    then(responseJson).extractingJsonPathStringValue("@.title").isEqualTo(bookTitle);
-    then(responseJson).extractingJsonPathStringValue("@.author").isNull();
-    then(responseJson).extractingJsonPathStringValue("@.publisher").isNull();
-    then(responseJson).extractingJsonPathNumberValue("@.pages").isNull();
-    then(responseJson).extractingJsonPathStringValue("@.language").isNull();
-    then(responseJson).extractingJsonPathStringValue("@.description").isNull();
+    then(responseContent.getTitle()).isEqualTo(bookTitle);
+    then(responseContent.getAuthor()).isNull();
+    then(responseContent.getPublisher()).isNull();
+    then(responseContent.getPages()).isNull();
+    then(responseContent.getLanguage()).isNull();
+    then(responseContent.getDescription()).isNull();
   }
 
   @Test @Order(7)
@@ -213,8 +191,6 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(8)
-  void shouldHaveNoBookOnFinalGet() {
-    shouldHaveNoBookOnStartGet();
-  }
+  void shouldHaveNoBookOnFinalGet() { shouldHaveNoBookOnStartGet(); }
 
 }
