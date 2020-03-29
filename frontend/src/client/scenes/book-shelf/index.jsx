@@ -12,9 +12,15 @@ const pageStyle = css`
 `;
 
 const BookShelf = () => (
-  <div css={pageStyle}>
-    <BookTable />
-  </div>
+  <>
+    <header>
+      <h1>Your Personal Book Shelf</h1>
+    </header>
+    <article css={pageStyle}>
+      <h2>Book Table List</h2>
+      <BookTable />
+    </article>
+  </>
 );
 
 export default BookShelf;
