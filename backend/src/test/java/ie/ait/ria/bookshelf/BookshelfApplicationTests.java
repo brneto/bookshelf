@@ -1,5 +1,6 @@
 package ie.ait.ria.bookshelf;
 
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -7,10 +8,13 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.ait.ria.bookshelf.model.Book;
 import ie.ait.ria.bookshelf.repository.BookRepository;
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashMap;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -29,7 +33,10 @@ import org.springframework.http.ResponseEntity;
 @TestMethodOrder(OrderAnnotation.class)
 class BookshelfApplicationTests {
 
-  private final URI baseUrl = URI.create("/api/books/");
+  private final URI baseUri = URI.create("/api/books/");
+  private final HashMap<String, Object> bookUpdater = new HashMap<>();
+  private final Long bookIdInTest = 1L;
+  private final URI bookUriInTest = baseUri.resolve(bookIdInTest.toString());
 
   // https://rtmccormick.com/2017/07/30/solved-testing-patch-spring-boot-testresttemplate/
   @Autowired
@@ -57,7 +64,7 @@ class BookshelfApplicationTests {
   void shouldHaveNoBookOnStartGet() {
     // given
     RequestEntity<Void> request = RequestEntity
-        .get(baseUrl)
+        .get(baseUri)
         .accept(APPLICATION_JSON)
         .build();
 
@@ -65,7 +72,7 @@ class BookshelfApplicationTests {
     ResponseEntity<CollectionModel<Book>> response =
         restTemplate.exchange(request, new ParameterizedTypeReference<CollectionModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    Collection<Book> responseContent = response.getBody().getContent();
+    Collection<Book> responseContent = requireNonNull(response.getBody()).getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
@@ -76,7 +83,7 @@ class BookshelfApplicationTests {
   void shouldCreateABookWithPost() {
     // given
     RequestEntity<Book> request = RequestEntity
-        .post(baseUrl)
+        .post(baseUri)
         .accept(APPLICATION_JSON)
         .body(book);
 
@@ -84,10 +91,11 @@ class BookshelfApplicationTests {
     ResponseEntity<EntityModel<Book>> response =
         restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    Book responseContent = response.getBody().getContent();
+    Book responseContent = requireNonNull(response.getBody()).getContent();
 
     // then
     then(responseStatus).isEqualTo(CREATED);
+    assert responseContent != null;
     then(responseContent.getTitle()).isEqualTo(book.getTitle());
     then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
     then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
@@ -101,7 +109,7 @@ class BookshelfApplicationTests {
   void shouldHaveOneBookOnGet() {
     // given
     RequestEntity<Void> request = RequestEntity
-        .get(baseUrl)
+        .get(baseUri)
         .accept(APPLICATION_JSON)
         .build();
 
@@ -109,35 +117,37 @@ class BookshelfApplicationTests {
     ResponseEntity<CollectionModel<Book>> response =
         restTemplate.exchange(request, new ParameterizedTypeReference<CollectionModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    Collection<Book> responseContent = response.getBody().getContent();
+    Collection<Book> responseContent = requireNonNull(response.getBody()).getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
     then(responseContent).isNotEmpty();
+    then(responseContent.size()).isPositive();
   }
 
   @Test @Order(5)
-  void shouldUpdateExistingBookWithPatch() {
+  void shouldUpdateExistingBookWithPatch(@Autowired ObjectMapper objectMapper)
+      throws JsonProcessingException {
     // given
-    String bookId = "1";
-    String bookTitle = "The call of the wild";
-    String requestJson = String.format("{\"id\":%s,\"title\":\"%s\"}", bookId, bookTitle);
+    String newTitle = "The call of the wild";
+    bookUpdater.put("title", newTitle);
 
     RequestEntity<String> request = RequestEntity
-        .patch(baseUrl.resolve(bookId))
+        .patch(bookUriInTest)
         .contentType(APPLICATION_JSON)
         .accept(APPLICATION_JSON)
-        .body(requestJson);
+        .body(objectMapper.writeValueAsString(bookUpdater));
 
     // when
     ResponseEntity<EntityModel<Book>> response =
         restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    Book responseContent = response.getBody().getContent();
+    Book responseContent = requireNonNull(response.getBody()).getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
-    then(responseContent.getTitle()).isEqualTo(bookTitle);
+    assert responseContent != null;
+    then(responseContent.getTitle()).isEqualTo(newTitle);
     then(responseContent.getTitle()).isNotEqualTo(book.getAuthor());
     then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
     then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
@@ -147,26 +157,28 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(6)
-  void shouldReplaceExistingBookWithPut() {
+  void shouldReplaceExistingBookWithPut(@Autowired ObjectMapper objectMapper)
+      throws JsonProcessingException {
     // given
-    String bookId = "1";
-    String bookTitle = "Pollyana";
-    String requestJson = String.format("{\"id\":%s,\"title\":\"%s\"}", bookId, bookTitle);
+    String newTitle = "Pollyana";
+    bookUpdater.put("title", newTitle);
+
     RequestEntity<String> request = RequestEntity
-        .put(baseUrl.resolve(bookId))
+        .put(bookUriInTest)
         .contentType(APPLICATION_JSON)
         .accept(APPLICATION_JSON)
-        .body(requestJson);
+        .body(objectMapper.writeValueAsString(bookUpdater));
 
     // when
     ResponseEntity<EntityModel<Book>> response =
         restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
     HttpStatus responseStatus = response.getStatusCode();
-    Book responseContent = response.getBody().getContent();
+    Book responseContent = requireNonNull(response.getBody()).getContent();
 
     // then
     then(responseStatus).isEqualTo(OK);
-    then(responseContent.getTitle()).isEqualTo(bookTitle);
+    assert responseContent != null;
+    then(responseContent.getTitle()).isEqualTo(newTitle);
     then(responseContent.getAuthor()).isNull();
     then(responseContent.getPublisher()).isNull();
     then(responseContent.getPages()).isNull();
@@ -177,9 +189,8 @@ class BookshelfApplicationTests {
   @Test @Order(7)
   void shouldDeleteExistingBookWithDelete() {
     // given
-    String bookId = "1";
     RequestEntity<Void> request = RequestEntity
-        .delete(baseUrl.resolve(bookId))
+        .delete(bookUriInTest)
         .build();
 
     // when
