@@ -5,9 +5,9 @@ import { Global } from '@emotion/core';
 import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
-import globalStyle, * as themes from '../libs/style';
-import * as routes from '../libs/routes';
-import MainPage from './MainPage';
+import globalStyle, * as themes from './style';
+import * as routes from './routes';
+import { BookShelf, BookForm } from './scenes';
 
 const
   propTypes = {
@@ -16,15 +16,15 @@ const
   },
   // https://medium.com/better-programming/react-router-v6-in-two-minutes-a7a2963e2340
   // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/hooks.md
-  Root = ({ history, store }) => (
+  App = ({ history, store }) => (
     <ThemeProvider theme={themes.main}>
       <StrictMode>
         <Global styles={globalStyle} />
         <Provider store={store}>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route {...routes.main} component={MainPage} />
-              <Route {...routes.bookForm} component={MainPage} />
+              <Route {...routes.main} component={BookShelf} />
+              <Route {...routes.form} component={BookForm} />
             </Switch>
           </ConnectedRouter>
         </Provider>
@@ -32,6 +32,6 @@ const
     </ThemeProvider>
   );
 
-Root.propTypes = propTypes;
+App.propTypes = propTypes;
 
-export default Root;
+export default App;

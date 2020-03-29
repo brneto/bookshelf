@@ -7,4 +7,4 @@ type router = {
 
 export const
   main: router = { path: '/', exact: true },
-  bookForm: router = { path: '/books/:id?' };
+  form: router = { path: '/books/:id?' };

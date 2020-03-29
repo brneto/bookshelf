@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/core';
-import { BookTable } from './book-table';
+import { BookTable } from './components';
 
 const pageStyle = css`
   position: relative;
@@ -11,10 +11,10 @@ const pageStyle = css`
     0 25px 50px 0 rgba(0, 0, 0, .1);
 `;
 
-const BookTablePage = () => (
+const BookShelf = () => (
   <div css={pageStyle}>
     <BookTable />
   </div>
 );
 
-export default BookTablePage;
+export default BookShelf;
