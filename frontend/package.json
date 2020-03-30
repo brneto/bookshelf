@@ -58,6 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "autoprefixer": "^9.7.5",
+    "axios": "^0.19.2",
     "babel-eslint": "^11.0.0-beta.2",
     "babel-loader": "^8.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
