@@ -2,22 +2,24 @@ import React from 'react';
 import styled from '@emotion/styled';
 import BookList from './BookList';
 
-const Head = styled.thead`
-  color: red;
+const Table = styled.table`
+  & > head {
+    color: red;
+  }
 `;
 
 const BookTable = () => (
-  <table>
+  <Table>
     <caption>List of Books</caption>
-    <Head>
+    <head>
       <tr>
         <th>Title</th>
         <th>Author</th>
         <th>Publisher</th>
       </tr>
-    </Head>
+    </head>
     <BookList />
-  </table>
+  </Table>
 );
 
 export default BookTable;
