@@ -38,8 +38,10 @@ import axios from 'axios';
 //     "number": 0
 //   }
 // }
+const url = new URL('http://localhost:8080/api/books');
+
 const instance = axios.create({
-  baseURL: 'https://localhost:8080/api/books',
+  baseURL: url.href,
   headers: {
     post: {
       'Content-Type': 'application/json',
