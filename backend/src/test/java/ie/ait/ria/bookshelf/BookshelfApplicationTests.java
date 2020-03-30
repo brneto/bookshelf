@@ -96,6 +96,7 @@ class BookshelfApplicationTests {
     // then
     then(responseStatus).isEqualTo(CREATED);
     assert responseContent != null;
+    then(responseContent.getId()).isEqualTo(1);
     then(responseContent.getTitle()).isEqualTo(book.getTitle());
     then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
     then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
@@ -147,6 +148,7 @@ class BookshelfApplicationTests {
     // then
     then(responseStatus).isEqualTo(OK);
     assert responseContent != null;
+    then(responseContent.getId()).isEqualTo(1);
     then(responseContent.getTitle()).isEqualTo(newTitle);
     then(responseContent.getTitle()).isNotEqualTo(book.getAuthor());
     then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
@@ -178,6 +180,7 @@ class BookshelfApplicationTests {
     // then
     then(responseStatus).isEqualTo(OK);
     assert responseContent != null;
+    then(responseContent.getId()).isEqualTo(1);
     then(responseContent.getTitle()).isEqualTo(newTitle);
     then(responseContent.getAuthor()).isNull();
     then(responseContent.getPublisher()).isNull();

@@ -1,13 +1,21 @@
 package ie.ait.ria.bookshelf;
 
+import ie.ait.ria.bookshelf.model.Book;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 
 @SpringBootApplication
 public class BookshelfApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(BookshelfApplication.class, args);
+  }
+
+  @Bean
+  public RepositoryRestConfigurer repositoryRestConfigurer() {
+    return RepositoryRestConfigurer.withConfig(config -> config.exposeIdsFor(Book.class));
   }
 
 }
