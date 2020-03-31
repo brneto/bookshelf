@@ -1,13 +1,14 @@
 import { takeEvery, all } from 'redux-saga/effects';
-import { effects } from '../actions';
-import * as workers from './todo-workers';
+import { commands } from '../actions';
+import * as workers from './book-workers';
 
 function* rootSaga() {
   try {
     yield all({
-      fetchTodosWatcher: takeEvery(effects.fetchTodos, workers.fetchTodos),
-      addTodoWatcher: takeEvery(effects.addTodo, workers.addTodo),
-      toggleTodoWatcher: takeEvery(effects.toggleTodo, workers.toggleTodo),
+      fetchBooksWatcher: takeEvery(commands.fetchBooks, workers.fetchBooks),
+      addBookWatcher: takeEvery(commands.addBook, workers.addBook),
+      editBookWatcher: takeEvery(commands.editBook, workers.editBook),
+      removeBookWatcher: takeEvery(commands.removeBook, workers.removeBook),
     });
   } catch(e) {
     throw new Error('One of the Effects was rejected before all the effects complete: ' + e);

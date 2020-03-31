@@ -6,10 +6,10 @@ const actionFunction = createActionFunction('DOCUMENT');
 // Document actions
 // Naming Convention: <subject><past-tense verb>
 export const {
-  todosFetched, todoAdded, todoToggled
+  todosFetched, bookAdded, bookEdited, bookRemoved
 } = createActions({
   BOOKS_FETCHED: actionFunction,
   BOOK_ADDED: actionFunction,
   BOOK_EDITED: actionFunction,
-  BOOK_REMOVE: actionFunction,
+  BOOK_REMOVED: actionFunction,
 });

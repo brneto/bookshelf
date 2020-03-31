@@ -1,27 +1,26 @@
 import { combineActions, handleActions } from 'redux-actions';
-import { flip, prop, identity } from 'ramda';
 import { produce } from 'immer';
-import { createSelector } from 'reselect';
 import { documents } from '../actions';
 
 const
-  { todosFetched, todoAdded, todoToggled } = documents,
+  { booksFetched, bookAdded, bookEdited, bookRemove } = documents,
   byId = handleActions(
     {
-      [combineActions(todosFetched, todoAdded, todoToggled)]: {
-        next: produce((draft, { payload: { entities } }) => {
-          Object.assign(draft, entities.todos); //modify the current draft state
-        }),
-      }
-    },
-    {} // Initial state
+      [combineActions(booksFetched, bookAdded, bookEdited)]: {
+        next: (state, { payload: { entities } }) => ({ ...state, ...entities }),
+      },
+      [bookRemove]: {
+        next: produce((draft, { payload }) => void delete draft[payload]),
+      },
+    }, {} // Initial state
   );
 
 // SELECTORS
-// flip(prop) :: {s: a} -> s -> a | Undefined
-const createGetTodo = createSelector([flip(prop)], identity);
+const getBookById = (state, id) => isNaN(id)
+  ? throw new Error('Ilegal element type. id must be a number.')
+  : state[id];
 
 export {
   byId as default,
-  createGetTodo,
+  getBookById,
 };

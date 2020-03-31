@@ -70,6 +70,6 @@ const addBook = async book => extractBook((await instance.post('/', book)).data)
 
 const editBook = async (id, book) => extractBook((await instance.put(`/${id}`, book)).data);
 
-const removeBook = async id => (await instance.delete(`/${id}`).statusText);
+const removeBook = async id => (await instance.delete(`/${id}`)).status;
 
 export { fetchBooks, addBook, editBook, removeBook };
