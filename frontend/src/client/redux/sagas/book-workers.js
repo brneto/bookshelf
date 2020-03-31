@@ -1,3 +1,4 @@
+/* eslint-disable import/namespace */
 import { normalize } from 'normalizr';
 import { call, put, select, cancel } from 'redux-saga/effects';
 import { events, documents } from '../actions';
@@ -15,6 +16,7 @@ function* fetchBooks() {
     const
       response = yield call(api.book.fetchBooks),
       data = normalize(response, schemas.bookList);
+
 
     yield put(documents.booksFetched(data));
     yield put(events.succeedFetch());
@@ -43,9 +45,9 @@ function* editBook({ payload: book }) {
       response = yield call(api.book.editBook, id, book),
       data = normalize(response, schemas.book);
 
-    yield put(documents.bookAdded(data));
+    yield put(documents.bookEdited(data));
   } catch (error) {
-    yield put(documents.bookAdded(error));
+    yield put(documents.bookEdited(error));
   }
 }
 
@@ -55,7 +57,7 @@ function* removeBook({ payload: id }) {
 
     yield put(documents.bookRemoved(response));
   } catch(error) {
-    yield put(documents.bookAdded(error));
+    yield put(documents.bookRemoved(error));
   }
 }
 

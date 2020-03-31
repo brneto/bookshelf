@@ -3,27 +3,27 @@ import { combineActions, handleActions } from 'redux-actions';
 import { produce } from 'immer';
 import { events, documents } from '../actions';
 
+const { startedFetch, succeedFetch, failedFetch } = events;
 const fetchStatus = handleActions(
   {
-    [events.startedFetch]: produce(() => 'pending'),
-    [events.succeedFetch]: produce(() => 'resolved'),
-    [events.failedFetch]: produce(() => 'rejected'),
+    [startedFetch]: produce(() => 'pending'),
+    [succeedFetch]: produce(() => 'resolved'),
+    [failedFetch]: produce(() => 'rejected'),
   },
   'idle' // Initial state
 );
 
-const { booksFetched, bookAdded, bookRemove } = documents;
-
+const { booksFetched, bookAdded, bookRemoved } = documents;
 const ids = handleActions(
   {
-    [documents.booksFetched]: { // return an entirely new state
+    [booksFetched]: { // return an entirely new state
       next: produce((draft, { payload }) => payload.result),
       throw: () => []
     },
-    [documents.bookAdded]: { // modify the current draft state
+    [bookAdded]: { // modify the current draft state
       next: produce((draft, { payload }) => void draft.push(payload.result)),
     },
-    [documents.bookRemove]: { // return an entirely new state
+    [bookRemoved]: { // return an entirely new state
       next: produce((draft, { payload }) => draft.filter(i => i !== payload.result)),
     },
   }, [] // Initial state
@@ -31,7 +31,7 @@ const ids = handleActions(
 
 const error = handleActions(
     {
-      [combineActions(booksFetched, bookAdded, bookRemove)]: {
+      [combineActions(booksFetched, bookAdded, bookRemoved)]: {
         next: () => null,
         throw: produce((draft, { payload }) => payload)
       },

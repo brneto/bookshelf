@@ -6,7 +6,7 @@ const actionFunction = createActionFunction('DOCUMENT');
 // Document actions
 // Naming Convention: <subject><past-tense verb>
 export const {
-  todosFetched, bookAdded, bookEdited, bookRemoved
+  booksFetched, bookAdded, bookEdited, bookRemoved
 } = createActions({
   BOOKS_FETCHED: actionFunction,
   BOOK_ADDED: actionFunction,

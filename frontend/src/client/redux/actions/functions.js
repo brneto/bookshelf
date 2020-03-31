@@ -5,6 +5,6 @@
 // }
 
 export const createActionFunction = type => [
-  state => state,
+  payload => payload,
   () => ({ type })
 ];

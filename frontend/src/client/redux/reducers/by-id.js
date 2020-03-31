@@ -3,13 +3,13 @@ import { produce } from 'immer';
 import { documents } from '../actions';
 
 const
-  { booksFetched, bookAdded, bookEdited, bookRemove } = documents,
+  { booksFetched, bookAdded, bookEdited, bookRemoved } = documents,
   byId = handleActions(
     {
       [combineActions(booksFetched, bookAdded, bookEdited)]: {
         next: (state, { payload: { entities } }) => ({ ...state, ...entities }),
       },
-      [bookRemove]: {
+      [bookRemoved]: {
         next: produce((draft, { payload }) => void delete draft[payload]),
       },
     }, {} // Initial state

@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from '@emotion/styled';
+import { commands } from '../../../redux/actions';
+import {
+  getFetchStatus,
+  getError,
+  getBooks,
+} from '../../../redux/reducers';
+import { LoadingDots } from '../../../components';
 import BookList from './BookList';
 
 const Table = styled.table`
@@ -8,18 +17,62 @@ const Table = styled.table`
   }
 `;
 
-const BookTable = () => (
-  <Table>
-    <caption>List of Books</caption>
-    <head>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publisher</th>
-      </tr>
-    </head>
-    <BookList />
-  </Table>
-);
+const
+  mapStateToProps = state => ({
+    books: getBooks(state),
+    status: getFetchStatus(state),
+    error: getError(state),
+  }),
+  mapDispatchToProps = {
+    fetchBooks: commands.fetchBooks,
+    editBook: commands.editBook,
+    removeBook: commands.removeBook,
+  },
+  subscribe = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  propTypes = {
+    books: PropTypes.array.isRequired,
+    status: PropTypes.object.isRequired,
+    error: PropTypes.instanceOf(Error),
+    fetchBooks: PropTypes.func.isRequired,
+    editBook: PropTypes.func.isRequired,
+    removeBook: PropTypes.func.isRequired,
+  };
 
-export default BookTable;
+const BookTable = ({
+  books, status, error,
+  fetchBooks, editBook, removeBook,
+}) => {
+  useEffect(() => void fetchBooks(), [fetchBooks]);
+
+  let render = <p>No books fetched from shelf yet!</p>;
+
+  if (status.isLoading) render = (<LoadingDots>Loading the shelf</LoadingDots>);
+
+  if (status.isRejected) render = <p>{error.message}</p>;
+
+  if (status.isResolved) render = (
+    <Table>
+      <caption>List of Books</caption>
+      <head>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Publisher</th>
+        </tr>
+      </head>
+      {
+        books.length
+          ? <BookList books={books} onEdit={editBook} onDelete={removeBook} />
+          : <tr><td colSpan={3}>No books in the shelf at the moment.</td></tr>
+      }
+    </Table>
+  );
+
+  return <article>{render}</article>;
+};
+BookTable.propTypes = propTypes;
+
+export default subscribe(BookTable);
