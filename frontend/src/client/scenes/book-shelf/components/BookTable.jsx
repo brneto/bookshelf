@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { commands } from '../../../redux/actions';
 import {
@@ -47,11 +48,14 @@ const BookTable = ({
 }) => {
   useEffect(() => void fetchBooks(), [fetchBooks]);
 
+  const history = useHistory();
+  const handleGoToForm = () => history.push('/books');
+
   let render = <p>No books fetched from shelf yet!</p>;
 
   if (status.isLoading) render = (<LoadingDots>Loading the shelf</LoadingDots>);
 
-  if (status.isRejected) render = <p>{error.message}</p>;
+  if (status.isRejected) render = <p>The server failed with the message: {error.message}</p>;
 
   if (status.isResolved) render = (
     <Table>
@@ -61,6 +65,7 @@ const BookTable = ({
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
+          <th><button onClick={handleGoToForm}>New Book</button></th>
         </tr>
       </head>
       {
@@ -71,7 +76,7 @@ const BookTable = ({
     </Table>
   );
 
-  return <article>{render}</article>;
+  return <section>{render}</section>;
 };
 BookTable.propTypes = propTypes;
 
