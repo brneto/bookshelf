@@ -3,11 +3,13 @@ import { createActionFunction } from './functions';
 
 const actionFunction = createActionFunction('COMMAND');
 
-// Pure Command actions message
+// Command actions message
 // Naming Convention: <imperative verb><subject>
 export const {
-  addTodoToList, removeTodoFromList
+  fetchBooks, addBook, editBook, removeBook
 } = createActions({
-  ADD_TODO_TO_LIST: actionFunction,
-  REMOVE_TODO_FROM_LIST: actionFunction,
+  'FETCH_BOOKS': actionFunction,
+  'ADD_BOOK': actionFunction,
+  'EDIT_BOOK': actionFunction,
+  'REMOVE_BOOK': actionFunction,
 });

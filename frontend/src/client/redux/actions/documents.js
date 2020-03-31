@@ -8,7 +8,8 @@ const actionFunction = createActionFunction('DOCUMENT');
 export const {
   todosFetched, todoAdded, todoToggled
 } = createActions({
-  TODOS_FETCHED: actionFunction,
-  TODO_ADDED: actionFunction,
-  TODO_TOGGLED: actionFunction,
+  BOOKS_FETCHED: actionFunction,
+  BOOK_ADDED: actionFunction,
+  BOOK_EDITED: actionFunction,
+  BOOK_REMOVE: actionFunction,
 });
