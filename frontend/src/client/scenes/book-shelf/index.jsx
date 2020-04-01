@@ -1,8 +1,8 @@
 import React from 'react';
-import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 import { BookTable } from './components';
 
-const pageStyle = css`
+const Article = styled.article`
   position: relative;
   margin: 130px 0 40px 0;
   background: #fff;
@@ -12,15 +12,12 @@ const pageStyle = css`
 `;
 
 const BookShelf = () => (
-  <>
+  <Article>
     <header>
       <h1>Your Personal Book Shelf</h1>
     </header>
-    <article css={pageStyle}>
-      <h2>Book Table List</h2>
-      <BookTable />
-    </article>
-  </>
+    <BookTable />
+  </Article>
 );
 
 export default BookShelf;

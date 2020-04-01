@@ -13,8 +13,12 @@ import { LoadingDots } from '../../../components';
 import BookList from './BookList';
 
 const Table = styled.table`
-  & > head {
+  & > thead {
     color: red;
+  }
+
+  & > tbody {
+    color: blue;
   }
 `;
 
@@ -66,19 +70,21 @@ const BookTable = ({
   if (status.isResolved) render = (
     <Table>
       <caption>List of Books</caption>
-      <head>
+      <thead>
         <tr>
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
           <th><button onClick={handleGoToForm}>New Book</button></th>
         </tr>
-      </head>
+      </thead>
+      <tbody>
       {
         books.length
           ? <BookList books={books} onEdit={editBook} onDelete={removeBook} />
           : <tr><td colSpan={3}>No books in the shelf at the moment.</td></tr>
       }
+      </tbody>
     </Table>
   );
 
