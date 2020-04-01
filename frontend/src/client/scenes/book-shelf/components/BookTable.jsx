@@ -50,12 +50,18 @@ const BookTable = ({
 
   const history = useHistory();
   const handleGoToForm = () => history.push('/books');
+  const handleRetry = () => fetchBooks();
 
   let render = <p>No books fetched from shelf yet!</p>;
 
-  if (status.isLoading) render = (<LoadingDots>Loading the shelf</LoadingDots>);
+  if (status.isLoading) render = <LoadingDots>Loading the shelf</LoadingDots>;
 
-  if (status.isRejected) render = <p>The server failed with the message: {error.message}</p>;
+  if (status.isRejected) render = (
+    <p>
+      The server failed with the message: {error.message}.<br />
+      <button onClick={handleRetry}>Try again</button>
+    </p>
+  );
 
   if (status.isResolved) render = (
     <Table>
