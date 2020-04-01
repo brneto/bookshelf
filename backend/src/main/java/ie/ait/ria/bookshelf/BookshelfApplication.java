@@ -15,7 +15,11 @@ public class BookshelfApplication {
 
   @Bean
   public RepositoryRestConfigurer repositoryRestConfigurer() {
-    return RepositoryRestConfigurer.withConfig(config -> config.exposeIdsFor(Book.class));
+    return RepositoryRestConfigurer.withConfig(config ->
+        config.exposeIdsFor(Book.class)
+            .getCorsRegistry()
+            .addMapping("/api/**")
+            .allowedOrigins("http://localhost:3000"));
   }
 
 }
