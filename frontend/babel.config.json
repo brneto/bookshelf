@@ -6,7 +6,6 @@
     ["@babel/plugin-proposal-private-methods", { "loose": true }],
     "@babel/plugin-proposal-export-namespace-from",
     "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-proposal-function-bind",
     "@babel/plugin-proposal-throw-expressions"
   ],
   "presets": [
