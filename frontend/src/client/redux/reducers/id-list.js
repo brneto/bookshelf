@@ -17,7 +17,10 @@ const { booksFetched, bookAdded, bookRemoved } = documents;
 const ids = handleActions(
   {
     [booksFetched]: { // return an entirely new state
-      next: produce((draft, { payload }) => payload.result),
+      next: produce((draft, { payload: { result } }) => {
+        if (isNaN(result)) return result;
+        if (!draft.includes(result)) draft.push(result);
+      }),
       throw: () => []
     },
     [bookAdded]: { // modify the current draft state

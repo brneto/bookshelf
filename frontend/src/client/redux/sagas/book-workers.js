@@ -14,11 +14,8 @@ function* fetchBooks({ payload: id }) {
     yield put(events.startedFetch());
 
     const
-      response = yield isNaN(id)
-        ? call(api.book.fetchBooks)
-        : call(api.book.fetchBookById, id),
-      data = normalize(response, schemas.bookList);
-
+      response = yield isNaN(id) ? call(api.book.fetchBooks) : call(api.book.fetchBookById, id),
+      data = normalize(response, isNaN(id) ? schemas.bookList : schemas.book);
 
     yield put(documents.booksFetched(data));
     yield put(events.succeedFetch());
