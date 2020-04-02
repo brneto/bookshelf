@@ -7,12 +7,13 @@ const
   propTypes = {
     input: PropTypes.object.isRequired,
     meta: PropTypes.object,
+    required: PropTypes.bool,
   },
-  TextField = ({ input, meta }) => {
+  TextField = ({ input, meta, required }) => {
     const label = capitalize(input.name);
     return (
       <Label>{label}:&nbsp;
-        <input type="text" {...input} placeholder={label} />
+        <input type="text" {...input} required={required} placeholder={label} />
         {meta.touched && meta.error && <span>{meta.error}</span>}
       </Label>
     );

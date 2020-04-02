@@ -24,7 +24,7 @@ const ids = handleActions(
       next: produce((draft, { payload }) => void draft.push(payload.result)),
     },
     [bookRemoved]: { // return an entirely new state
-      next: produce((draft, { payload }) => draft.filter(i => i !== payload.result)),
+      next: produce((draft, { payload }) => draft.filter(i => i !== payload)),
     },
   }, [] // Initial state
 );

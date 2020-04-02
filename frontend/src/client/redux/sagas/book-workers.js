@@ -6,7 +6,7 @@ import * as selectors from '../reducers';
 import * as api from '../../api';
 import * as schemas from './book-schemas';
 
-function* fetchBooks() {
+function* fetchBooks({ payload: id }) {
   try {
     const fetchStatus = yield select(selectors.getFetchStatus);
     if (fetchStatus.isLoading) yield cancel();
@@ -14,7 +14,9 @@ function* fetchBooks() {
     yield put(events.startedFetch());
 
     const
-      response = yield call(api.book.fetchBooks),
+      response = yield isNaN(id)
+        ? call(api.book.fetchBooks)
+        : call(api.book.fetchBookById, id),
       data = normalize(response, schemas.bookList);
 
 
@@ -53,9 +55,9 @@ function* editBook({ payload: book }) {
 
 function* removeBook({ payload: id }) {
   try {
-    const response = yield call(api.book.removeBook, id);
+    yield call(api.book.removeBook, id);
 
-    yield put(documents.bookRemoved(response));
+    yield put(documents.bookRemoved(id));
   } catch(error) {
     yield put(documents.bookRemoved(error));
   }

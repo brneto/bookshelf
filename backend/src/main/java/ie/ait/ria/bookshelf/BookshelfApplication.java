@@ -19,7 +19,8 @@ public class BookshelfApplication {
         config.exposeIdsFor(Book.class)
             .getCorsRegistry()
             .addMapping("/api/**")
-            .allowedOrigins("http://localhost:3000"));
+            .allowedOrigins("http://localhost:3000")
+            .allowedMethods("*"));
   }
 
 }

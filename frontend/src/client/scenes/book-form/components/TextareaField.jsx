@@ -7,12 +7,13 @@ const
   propTypes = {
     input: PropTypes.object.isRequired,
     meta: PropTypes.object,
+    required: PropTypes.bool,
   },
-  TextareaField = ({ input, meta }) => {
+  TextareaField = ({ input, meta, required }) => {
     const label = capitalize(input.name);
     return (
       <Label>{label}:&nbsp;
-        <textarea {...input} placeholder={label} />
+        <textarea {...input} required={required} rows="5" cols="33" wrap="hard" placeholder={label} />
         {meta.touched && meta.error && <span>{meta.error}</span>}
       </Label>
     );

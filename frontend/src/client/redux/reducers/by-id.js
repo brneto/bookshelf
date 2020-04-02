@@ -7,7 +7,7 @@ const
   byId = handleActions(
     {
       [combineActions(booksFetched, bookAdded, bookEdited)]: {
-        next: (state, { payload: { entities } }) => ({ ...state, ...entities }),
+        next: (state, { payload: { entities: { book } } }) => ({ ...state, ...book }),
       },
       [bookRemoved]: {
         next: produce((draft, { payload }) => void delete draft[payload]),
@@ -16,9 +16,7 @@ const
   );
 
 // SELECTORS
-const getBookById = (state, id) => isNaN(id)
-  ? throw new Error('Ilegal element type. id must be a number.')
-  : state[id];
+const getBookById = (state, id) => isNaN(id) || !state[id] ? {} : state[id];
 
 export {
   byId as default,

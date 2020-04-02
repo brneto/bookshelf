@@ -42,19 +42,20 @@ const
     status: PropTypes.object.isRequired,
     error: PropTypes.instanceOf(Error),
     fetchBooks: PropTypes.func.isRequired,
-    editBook: PropTypes.func.isRequired,
     removeBook: PropTypes.func.isRequired,
   };
 
 const BookTable = ({
   books, status, error,
-  fetchBooks, editBook, removeBook,
+  fetchBooks, removeBook,
 }) => {
   useEffect(() => void fetchBooks(), [fetchBooks]);
 
-  const history = useHistory();
-  const handleGoToForm = () => history.push('/books');
-  const handleRetry = () => fetchBooks();
+  const
+    handleRetry = () => fetchBooks(),
+    history = useHistory(),
+    handleAddBook = () => history.push('/books'),
+    handleEditBook = id => history.push(`/books/${id}`);
 
   let render = <p>No books fetched from shelf yet!</p>;
 
@@ -75,13 +76,13 @@ const BookTable = ({
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
-          <th><button onClick={handleGoToForm}>New Book</button></th>
+          <th><button onClick={handleAddBook}>New</button></th>
         </tr>
       </thead>
       <tbody>
       {
         books.length
-          ? <BookList books={books} onEdit={editBook} onDelete={removeBook} />
+          ? <BookList books={books} onEdit={handleEditBook} onDelete={removeBook} />
           : <tr><td colSpan={3}>No books in the shelf at the moment.</td></tr>
       }
       </tbody>

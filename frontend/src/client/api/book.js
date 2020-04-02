@@ -49,7 +49,9 @@ const instance = axios.create({
   },
 });
 
-const createIdUrl = idPath => isNaN(idPath) ? '/' : `/${idPath}`;
+const createIdUrl = id => isNaN(id)
+  ? throw new Error(`Illegal parameter type. "id" must be number ${createIdUrl.name}.`)
+  : `/${id}`;
 
 const extractBook = halBook => ({
   id: halBook.id,
@@ -61,10 +63,12 @@ const extractBook = halBook => ({
   pages: halBook.pages,
 });
 
-const fetchBooks = async id => (await instance.get(createIdUrl(id)))
+const fetchBooks = async () => (await instance.get('/'))
   .data['_embedded']
   .books
   .map(extractBook);
+
+const fetchBookById = async id => extractBook((await instance.get(createIdUrl(id))).data);
 
 const addBook = async book => extractBook((await instance.post('/', book)).data);
 
@@ -72,4 +76,4 @@ const editBook = async (id, book) => extractBook((await instance.put(`/${id}`, b
 
 const removeBook = async id => (await instance.delete(`/${id}`)).status;
 
-export { fetchBooks, addBook, editBook, removeBook };
+export { fetchBooks, fetchBookById, addBook, editBook, removeBook };

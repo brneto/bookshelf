@@ -61,7 +61,7 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(2)
-  void shouldHaveNoBookOnStartGet() {
+  void shouldHaveNoBookWithGetAll() {
     // given
     RequestEntity<Void> request = RequestEntity
         .get(baseUri)
@@ -107,7 +107,7 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(4)
-  void shouldHaveOneBookOnGet() {
+  void shouldHaveOneBookWithGetAll() {
     // given
     RequestEntity<Void> request = RequestEntity
         .get(baseUri)
@@ -127,6 +127,33 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(5)
+  void shouldReturnOneBookWithGet() {
+    // given
+    RequestEntity<Void> request = RequestEntity
+        .get(bookUriInTest)
+        .accept(APPLICATION_JSON)
+        .build();
+
+    // when
+    ResponseEntity<EntityModel<Book>> response =
+        restTemplate.exchange(request, new ParameterizedTypeReference<EntityModel<Book>>() {});
+    HttpStatus responseStatus = response.getStatusCode();
+    Book responseContent = requireNonNull(response.getBody()).getContent();
+
+    // then
+    then(responseStatus).isEqualTo(OK);
+    assert responseContent != null;
+    then(responseContent.getId()).isEqualTo(1);
+    then(responseContent.getTitle()).isEqualTo(book.getTitle());
+    then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
+    then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
+    then(responseContent.getPages()).isEqualTo(book.getPages());
+    then(responseContent.getLanguage()).isEqualTo(book.getLanguage());
+    then(responseContent.getDescription()).isEqualTo(book.getDescription());
+    then(response.getBody().getLinks().hasLink("book")).isTrue();
+  }
+
+  @Test @Order(6)
   void shouldUpdateExistingBookWithPatch(@Autowired ObjectMapper objectMapper)
       throws JsonProcessingException {
     // given
@@ -158,7 +185,7 @@ class BookshelfApplicationTests {
     then(responseContent.getDescription()).isEqualTo(book.getDescription());
   }
 
-  @Test @Order(6)
+  @Test @Order(7)
   void shouldReplaceExistingBookWithPut(@Autowired ObjectMapper objectMapper)
       throws JsonProcessingException {
     // given
@@ -189,7 +216,7 @@ class BookshelfApplicationTests {
     then(responseContent.getDescription()).isNull();
   }
 
-  @Test @Order(7)
+  @Test @Order(8)
   void shouldDeleteExistingBookWithDelete() {
     // given
     RequestEntity<Void> request = RequestEntity
@@ -204,7 +231,7 @@ class BookshelfApplicationTests {
     then(responseStatus).isEqualTo(NO_CONTENT);
   }
 
-  @Test @Order(8)
-  void shouldHaveNoBookOnFinalGet() { shouldHaveNoBookOnStartGet(); }
+  @Test @Order(9)
+  void shouldHaveNoBookWithLastGetAll() { shouldHaveNoBookWithGetAll(); }
 
 }
