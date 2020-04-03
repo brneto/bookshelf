@@ -25,7 +25,7 @@ const createRootReducer = history => combineReducers({
 const matchSelector = createMatchSelector({ ...routes.form });
 const getPathId = (state) => matchSelector(state)?.params?.id;
 
-const getBooks = ({ book }) => book.idList.ids.map(id => book.byId[id]);
+const getBooks = ({ book: { idList, byId } }) => idList.ids.map(id => byId[id]);
 
 const getBookById = state => fromById.getBookById(state.book.byId, getPathId(state));
 

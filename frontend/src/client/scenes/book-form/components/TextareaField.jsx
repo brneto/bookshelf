@@ -13,7 +13,13 @@ const
     const label = capitalize(input.name);
     return (
       <Label>{label}:&nbsp;
-        <textarea {...input} required={required} rows="5" cols="33" wrap="hard" placeholder={label} />
+        <textarea {...input}
+          required={required}
+          rows="5"
+          cols="33"
+          wrap="hard"
+          placeholder={label}
+        />
         {meta.touched && meta.error && <span>{meta.error}</span>}
       </Label>
     );
