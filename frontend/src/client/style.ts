@@ -26,7 +26,7 @@ const globalStyle = (theme: Theme) => css`
 
   body {
     min-width: 230px;
-    max-width: 800px;
+    max-width: 553.5px;
     margin: 0 auto;
     padding: 0;
     background: ${theme.background};

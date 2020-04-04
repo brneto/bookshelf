@@ -14,8 +14,8 @@ const
       <td>{title}</td>
       <td>{author}</td>
       <td>{publisher}</td>
-      <td><button onClick={onEdit}>Edit</button></td>
-      <td><button onClick={onDelete}>Delete</button></td>
+      <th><button onClick={onEdit}>Edit</button></th>
+      <th><button onClick={onDelete}>Delete</button></th>
     </tr>
   );
 

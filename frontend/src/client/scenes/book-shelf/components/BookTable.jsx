@@ -69,9 +69,10 @@ const BookTable = ({
     [filter, setFilter] = useState(''),
     handleSortBy = e => setSortBy(e.target.value),
     handleFilterBy = e => setFilterBy(e.target.value),
-    handleSearch = e => console.log(e),
     handleClear = () => setFilter(''),
-    handleFilterChange = e => setFilter(e.target.value),
+    handleFilterChange = e => setFilter(e.target.value);
+
+  const
     sortBooks = books => {
       const compare = field => (a, b) => {
         const af = a[field], bf = b[field];
@@ -83,6 +84,11 @@ const BookTable = ({
       if (sortBy) return books.sort(compare(sortBy));
 
       return books;
+    },
+    filterBooks = books => {
+      const createFilter = field => book => book[field].includes(filter);
+
+      return filterBy && filter ? books.filter(createFilter(filterBy)) : books;
     };
 
   let render = <p>No books fetched from shelf yet!</p>;
@@ -101,7 +107,7 @@ const BookTable = ({
       <caption>List of Books</caption>
       <thead>
         <tr>
-          <td>
+          <th>
             <label>Sort by:&nbsp;
               <select value={sortBy} onChange={handleSortBy}>
                 <option value="">--Sort By--</option>
@@ -109,8 +115,8 @@ const BookTable = ({
                 <option value="author">Author</option>
               </select>
             </label>
-          </td>
-          <td>
+          </th>
+          <th>
             <label>Filter by:&nbsp;
               <select value={filterBy} onChange={handleFilterBy}>
                 <option value="">--Filter By--</option>
@@ -118,23 +124,32 @@ const BookTable = ({
                 <option value="author">Author</option>
               </select>
             </label>
-          </td>
-          <td><input type="text" value={filter} onChange={handleFilterChange} /></td>
-          <td><button onClick={handleSearch}>Search</button></td>
-          <td><button onClick={handleClear}>Clear</button></td>
+          </th>
+          <th colSpan="3">
+            <input type="text" value={filter} onChange={handleFilterChange} />&nbsp;
+            <button onClick={handleClear}>Clear</button>
+          </th>
         </tr>
         <tr>
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
-          <th colSpan="2"><button onClick={handleAddBook}>New</button></th>
+          <th colSpan="2">
+            <button onClick={handleAddBook}>New</button>
+          </th>
         </tr>
       </thead>
       <tbody>
       {
         books.length
-          ? <BookList books={sortBooks(books)} onEdit={handleEditBook} onDelete={removeBook} />
-          : <tr><td colSpan={3}>No books in the shelf at the moment.</td></tr>
+          ? <BookList
+              books={sortBooks(filterBooks(books))}
+              onEdit={handleEditBook}
+              onDelete={removeBook}
+            />
+          : <tr>
+              <td colSpan="3">No books in the shelf at the moment.</td>
+            </tr>
       }
       </tbody>
     </Table>
