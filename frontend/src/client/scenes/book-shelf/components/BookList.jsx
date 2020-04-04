@@ -15,7 +15,8 @@ const
       [filter, setFilter] = useState(''),
       handleSortBy = (event) => console.log(event),
       handleFilterBy = (event) => console.log(event),
-      handleSearch = (event) => console.log(event);
+      handleSearch = (event) => console.log(event),
+      handleClear = event => console.log(event);
 
     return (<>
       <tr>
@@ -38,7 +39,8 @@ const
           </label>
         </td>
         <td><input type="text" value={filter} /></td>
-        <td><button onChange={handleSearch}>Search</button></td>
+        <td><button onClick={handleSearch}>Search</button></td>
+        <td><button onClick={handleClear}>Clear</button></td>
       </tr>
       {books.map(({ id, ...rest }) => (
         <Book key={id} {...rest}
