@@ -1,6 +1,7 @@
 package ie.ait.ria.bookshelf;
 
 import ie.ait.ria.bookshelf.model.Book;
+import ie.ait.ria.bookshelf.model.Seller;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,9 @@ public class BookshelfApplication {
   @Bean
   public RepositoryRestConfigurer repositoryRestConfigurer() {
     return RepositoryRestConfigurer.withConfig(config ->
-        config.exposeIdsFor(Book.class)
+        config
+            .exposeIdsFor(Book.class)
+            .exposeIdsFor(Seller.class)
             .getCorsRegistry()
             .addMapping("/api/**")
             .allowedOrigins("http://localhost:3000")

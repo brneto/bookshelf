@@ -20,13 +20,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 public class SwaggerConfig {
 
   @Bean
-  public Docket docket() {
+  public Docket bookDocket() {
     return new Docket(DocumentationType.SWAGGER_2)
         .apiInfo(apiInfo())
-        .tags(new Tag("Book Entity", "Repository for Book entities"))
+        .tags(
+            new Tag("Book Entity", "Repository for Book entities"),
+            new Tag("Seller Entity", "Repository for Seller entities"))
         .select()
         .apis(RequestHandlerSelectors.any())
-        .paths(regex("/api/books.*"))
+        .paths(regex("/api/(books|sellers).*"))
         .build();
   }
 

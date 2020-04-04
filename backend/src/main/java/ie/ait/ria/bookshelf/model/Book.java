@@ -1,15 +1,17 @@
 package ie.ait.ria.bookshelf.model;
 
-import java.io.Serializable;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Book implements Serializable {
+public class Book {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = IDENTITY)
   private long id;
   private String title;
   private String author;
@@ -17,6 +19,9 @@ public class Book implements Serializable {
   private Integer pages;
   private String language;
   private String description;
+
+  @ManyToOne
+  private Seller seller;
 
   public long getId() { return id; }
 
@@ -31,6 +36,8 @@ public class Book implements Serializable {
   public String getLanguage() { return language; }
 
   public String getDescription() { return description; }
+
+  public Seller getSeller() { return seller; }
 
   public Book setId(long id) {
     this.id = id;
@@ -67,4 +74,8 @@ public class Book implements Serializable {
     return this;
   }
 
+  public Book setSeller(Seller seller) {
+    this.seller = seller;
+    return this;
+  }
 }
