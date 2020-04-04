@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+/* eslint-disable jsx-a11y/no-onchange */
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -13,6 +14,11 @@ import { LoadingDots } from '../../../components';
 import BookList from './BookList';
 
 const Table = styled.table`
+  th,
+  td {
+    border: 1px solid black;
+  }
+
   & > thead {
     color: red;
   }
@@ -57,6 +63,28 @@ const BookTable = ({
     handleAddBook = () => history.push('/books'),
     handleEditBook = id => history.push(`/books/${id}`);
 
+  const
+    [sortBy, setSortBy] = useState(''),
+    [filterBy, setFilterBy] = useState(''),
+    [filter, setFilter] = useState(''),
+    handleSortBy = e => setSortBy(e.target.value),
+    handleFilterBy = e => setFilterBy(e.target.value),
+    handleSearch = e => console.log(e),
+    handleClear = () => setFilter(''),
+    handleFilterChange = e => setFilter(e.target.value),
+    sortBooks = books => {
+      const compare = field => (a, b) => {
+        const af = a[field], bf = b[field];
+        if (af > bf) return 1;
+        if (af < bf) return -1;
+        return 0;
+      };
+
+      if (sortBy) return books.sort(compare(sortBy));
+
+      return books;
+    };
+
   let render = <p>No books fetched from shelf yet!</p>;
 
   if (status.isLoading) render = <LoadingDots>Loading the shelf</LoadingDots>;
@@ -73,16 +101,39 @@ const BookTable = ({
       <caption>List of Books</caption>
       <thead>
         <tr>
+          <td>
+            <label>Sort by:&nbsp;
+              <select value={sortBy} onChange={handleSortBy}>
+                <option value="">--Sort By--</option>
+                <option value="title">Title</option>
+                <option value="author">Author</option>
+              </select>
+            </label>
+          </td>
+          <td>
+            <label>Filter by:&nbsp;
+              <select value={filterBy} onChange={handleFilterBy}>
+                <option value="">--Filter By--</option>
+                <option value="title">Title</option>
+                <option value="author">Author</option>
+              </select>
+            </label>
+          </td>
+          <td><input type="text" value={filter} onChange={handleFilterChange} /></td>
+          <td><button onClick={handleSearch}>Search</button></td>
+          <td><button onClick={handleClear}>Clear</button></td>
+        </tr>
+        <tr>
           <th>Title</th>
           <th>Author</th>
           <th>Publisher</th>
-          <th><button onClick={handleAddBook}>New</button></th>
+          <th colSpan="2"><button onClick={handleAddBook}>New</button></th>
         </tr>
       </thead>
       <tbody>
       {
         books.length
-          ? <BookList books={books} onEdit={handleEditBook} onDelete={removeBook} />
+          ? <BookList books={sortBooks(books)} onEdit={handleEditBook} onDelete={removeBook} />
           : <tr><td colSpan={3}>No books in the shelf at the moment.</td></tr>
       }
       </tbody>

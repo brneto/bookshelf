@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Book from './Book';
 
@@ -9,39 +9,7 @@ const
     onDelete: PropTypes.func.isRequired,
   },
   BookList = ({ books, onEdit, onDelete }) => {
-    const
-      [sortBy, setSortBy] = useState(''),
-      [filterBy, setFilterBy] = useState(''),
-      [filter, setFilter] = useState(''),
-      handleSortBy = (event) => console.log(event),
-      handleFilterBy = (event) => console.log(event),
-      handleSearch = (event) => console.log(event),
-      handleClear = event => console.log(event);
-
     return (<>
-      <tr>
-        <td>
-          <label>Sort by:
-            <select value={sortBy} onBlur={handleSortBy}>
-              <option value="">--Sort By--</option>
-              <option value="title">Title</option>
-              <option value="author">Author</option>
-            </select>
-          </label>
-        </td>
-        <td>
-          <label>Sort by:
-            <select value={filterBy} onBlur={handleFilterBy}>
-              <option value="">--Filter By--</option>
-              <option value="title">Title</option>
-              <option value="author">Author</option>
-            </select>
-          </label>
-        </td>
-        <td><input type="text" value={filter} /></td>
-        <td><button onClick={handleSearch}>Search</button></td>
-        <td><button onClick={handleClear}>Clear</button></td>
-      </tr>
       {books.map(({ id, ...rest }) => (
         <Book key={id} {...rest}
           onEdit={() => onEdit(id)}
