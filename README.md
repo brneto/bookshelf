@@ -1,5 +1,5 @@
 # Book Shelf App Project
-This is a full stack CRUD application as a required assignment for the course of Rich Internet Application of the Msc. Degree in Software Engineering of [AIT](ait.ie).
+This is a full stack CRUD application as a required assignment for the course of Rich Internet Application of the [AIT](ait.ie) Msc. Degree in Software Engineering.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
