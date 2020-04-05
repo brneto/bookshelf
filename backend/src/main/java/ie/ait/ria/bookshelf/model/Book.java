@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import org.springframework.validation.annotation.Validated;
 
 @Entity
 public class Book {
@@ -13,11 +16,22 @@ public class Book {
   @Id
   @GeneratedValue(strategy = IDENTITY)
   private long id;
+
+  @NotBlank(message = "Title cannot be empty")
   private String title;
+
+  @NotBlank(message = "Author cannot be empty")
   private String author;
+
+  @NotBlank(message = "Publisher cannot be empty")
   private String publisher;
+
+  @Positive
   private Integer pages;
+
+  @NotBlank(message = "Language cannot be empty")
   private String language;
+
   private String description;
 
   @ManyToOne
