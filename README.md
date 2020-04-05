@@ -28,7 +28,7 @@ Once the command finishes press `Enter` and then run the following inside the sa
 ```
 $ mvn spring-boot:run
 ```
-You can confirm you the backend is up and running accessing the endpoint [HAL explorer](http://localhost:8080/api) or the link http://localhost:8080/api/books.
+You can confirm you the backend is up and running accessing the [HAL explorer](https://github.com/toedter/hal-explorer) on the link http://localhost:8080/api.
 
 ### Launch Frontend
 On the frontend side the dependencies is downloaded by running the following command inside the `<project-folder>/frontend/` directory:
