@@ -3,6 +3,7 @@ package ie.ait.ria.bookshelf;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -80,6 +81,45 @@ class BookshelfApplicationTests {
   }
 
   @Test @Order(3)
+  void shouldFailCreateABookWithPost() {
+    // given
+    bookUpdater.put("title", "The call of the wild");
+    RequestEntity<HashMap<String, Object>> request = RequestEntity
+        .post(baseUri)
+        .accept(APPLICATION_JSON)
+        .body(bookUpdater);
+
+    // when
+    ResponseEntity<String> response =
+        restTemplate.exchange(request, String.class);
+    HttpStatus responseStatus = response.getStatusCode();
+    String responseContent = requireNonNull(response.getBody());
+
+    System.out.println(responseContent);
+
+    // then
+    then(responseStatus).isEqualTo(BAD_REQUEST);
+    then(responseContent).isEqualTo("{\"errors\":["
+        + "{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"author\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"author cannot be empty\""
+        + "},{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"publisher\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"publisher cannot be empty\""
+        + "},{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"language\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"language cannot be empty\""
+        + "}"
+        + "]}");
+  }
+
+  @Test @Order(4)
   void shouldCreateABookWithPost() {
     // given
     RequestEntity<Book> request = RequestEntity
@@ -106,7 +146,7 @@ class BookshelfApplicationTests {
     then(response.getBody().getLinks().hasLink("book")).isTrue();
   }
 
-  @Test @Order(4)
+  @Test @Order(5)
   void shouldHaveOneBookWithGetAll() {
     // given
     RequestEntity<Void> request = RequestEntity
@@ -126,7 +166,7 @@ class BookshelfApplicationTests {
     then(responseContent.size()).isPositive();
   }
 
-  @Test @Order(5)
+  @Test @Order(6)
   void shouldReturnOneBookWithGet() {
     // given
     RequestEntity<Void> request = RequestEntity
@@ -153,12 +193,11 @@ class BookshelfApplicationTests {
     then(response.getBody().getLinks().hasLink("book")).isTrue();
   }
 
-  @Test @Order(6)
+  @Test @Order(7)
   void shouldUpdateExistingBookWithPatch(@Autowired ObjectMapper objectMapper)
       throws JsonProcessingException {
     // given
-    String newTitle = "The call of the wild";
-    bookUpdater.put("title", newTitle);
+    bookUpdater.put("title", "The call of the wild");
 
     RequestEntity<String> request = RequestEntity
         .patch(bookUriInTest)
@@ -176,7 +215,7 @@ class BookshelfApplicationTests {
     then(responseStatus).isEqualTo(OK);
     assert responseContent != null;
     then(responseContent.getId()).isEqualTo(1);
-    then(responseContent.getTitle()).isEqualTo(newTitle);
+    then(responseContent.getTitle()).isEqualTo(bookUpdater.get("title"));
     then(responseContent.getTitle()).isNotEqualTo(book.getAuthor());
     then(responseContent.getAuthor()).isEqualTo(book.getAuthor());
     then(responseContent.getPublisher()).isEqualTo(book.getPublisher());
@@ -185,12 +224,55 @@ class BookshelfApplicationTests {
     then(responseContent.getDescription()).isEqualTo(book.getDescription());
   }
 
-  @Test @Order(7)
+  @Test @Order(8)
+  void shouldFailReplaceExistingBookWithPut(@Autowired ObjectMapper objectMapper)
+      throws JsonProcessingException {
+    // given
+    bookUpdater.put("title", "Pollyana");
+
+    RequestEntity<String> request = RequestEntity
+        .put(bookUriInTest)
+        .contentType(APPLICATION_JSON)
+        .accept(APPLICATION_JSON)
+        .body(objectMapper.writeValueAsString(bookUpdater));
+
+    // when
+    ResponseEntity<String> response =
+        restTemplate.exchange(request, String.class);
+    HttpStatus responseStatus = response.getStatusCode();
+    String responseContent = requireNonNull(response.getBody());
+
+    // then
+    then(responseStatus).isEqualTo(BAD_REQUEST);
+    then(responseContent).isEqualTo("{\"errors\":["
+        + "{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"author\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"author cannot be empty\""
+        + "},{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"publisher\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"publisher cannot be empty\""
+        + "},{"
+        + "\"entity\":\"Book\","
+        + "\"property\":\"language\","
+        + "\"invalidValue\":null,"
+        + "\"message\":\"language cannot be empty\""
+        + "}"
+        + "]}");
+  }
+
+  @Test @Order(9)
   void shouldReplaceExistingBookWithPut(@Autowired ObjectMapper objectMapper)
       throws JsonProcessingException {
     // given
-    String newTitle = "Pollyana";
-    bookUpdater.put("title", newTitle);
+    bookUpdater.put("title", "Pollyana");
+    bookUpdater.put("author", "Jack Faike");
+    bookUpdater.put("publisher", "Children's Books");
+    bookUpdater.put("pages", 35);
+    bookUpdater.put("language", "Irish");
 
     RequestEntity<String> request = RequestEntity
         .put(bookUriInTest)
@@ -208,15 +290,15 @@ class BookshelfApplicationTests {
     then(responseStatus).isEqualTo(OK);
     assert responseContent != null;
     then(responseContent.getId()).isEqualTo(1);
-    then(responseContent.getTitle()).isEqualTo(newTitle);
-    then(responseContent.getAuthor()).isNull();
-    then(responseContent.getPublisher()).isNull();
-    then(responseContent.getPages()).isNull();
-    then(responseContent.getLanguage()).isNull();
+    then(responseContent.getTitle()).isEqualTo(bookUpdater.get("title"));
+    then(responseContent.getAuthor()).isEqualTo(bookUpdater.get("author"));
+    then(responseContent.getPublisher()).isEqualTo(bookUpdater.get("publisher"));
+    then(responseContent.getPages()).isEqualTo(bookUpdater.get("pages"));
+    then(responseContent.getLanguage()).isEqualTo(bookUpdater.get("language"));
     then(responseContent.getDescription()).isNull();
   }
 
-  @Test @Order(8)
+  @Test @Order(10)
   void shouldDeleteExistingBookWithDelete() {
     // given
     RequestEntity<Void> request = RequestEntity
@@ -231,7 +313,7 @@ class BookshelfApplicationTests {
     then(responseStatus).isEqualTo(NO_CONTENT);
   }
 
-  @Test @Order(9)
+  @Test @Order(11)
   void shouldHaveNoBookWithLastGetAll() { shouldHaveNoBookWithGetAll(); }
 
 }

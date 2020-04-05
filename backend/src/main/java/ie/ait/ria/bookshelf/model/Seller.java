@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Seller {
@@ -16,6 +17,8 @@ public class Seller {
   @Id
   @GeneratedValue(strategy = IDENTITY)
   private long id;
+
+  @NotBlank(message = "Seller Name cannot be empty")
   private String sellerName;
   private String location;
   private Integer rating;

@@ -3,6 +3,7 @@ package ie.ait.ria.bookshelf.config;
 import ie.ait.ria.bookshelf.model.Book;
 import ie.ait.ria.bookshelf.model.Seller;
 import ie.ait.ria.bookshelf.validator.BookValidator;
+import ie.ait.ria.bookshelf.validator.SellerValidator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
@@ -25,6 +26,9 @@ public class DataRestConfig implements RepositoryRestConfigurer {
   @Override
   public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
     v.addValidator("beforeSave", new BookValidator());
+    v.addValidator("beforeCreate", new BookValidator());
+    v.addValidator("beforeSave", new SellerValidator());
+    v.addValidator("beforeCreate", new SellerValidator());
   }
 
 }
