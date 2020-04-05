@@ -1,5 +1,5 @@
 # Book Shelf App Project
-This is a simple CRUD application as required as an assignment for the course of Rich Internet Application of the Msc. Degree in Software Engineering.
+This is a simple CRUD application as required assignment for the course of Rich Internet Application of the Msc. Degree in Software Engineering.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
