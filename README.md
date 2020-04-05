@@ -9,7 +9,6 @@ This is a simple CRUD application as required as an assignment for the course of
   - [Frontend](#frontend)
     - [Dependencies](#frontend-download-dependencies)
     - [Launch](#frontend-launch)
-  
 - [Documentation](#documentation)
   - [Introduction](#introduction)
   - [Backend Design](#backend-design)
