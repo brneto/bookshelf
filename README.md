@@ -3,12 +3,8 @@ This is a simple CRUD application as required as an assignment for the course of
 
 ## Table of Contents
 - [Getting Started](#getting-started)
-  - [Backend](#backend)
-    - [Download Dependencies](#backend-download-dependencies)
-    - [Launch](#backend-launch)
-  - [Frontend](#frontend)
-    - [Dependencies](#frontend-download-dependencies)
-    - [Launch](#frontend-launch)
+  - [Backend](#launch-backend)
+  - [Frontend](#launch-frontend)
 - [Documentation](#documentation)
   - [Introduction](#introduction)
   - [Backend Design](#backend-design)
@@ -20,10 +16,36 @@ This is a simple CRUD application as required as an assignment for the course of
     - [Main Patterns](#main-patterns)
     - [Endpoints](#endpoints)
 
+## Getting Started
+To use this application is recommended start the backend before the frontend, otherwise the frontend can not work properly or present unexpected behaviour.
 
-## Rich Internet Application Msc. Degree Subject Project
+### Launch Backend
+Before start running the backend application first it's needed to download the project dependencies. This is done executing the command below inside the `<project-folder>/backend/` directory:
+```
+$ mvn test-compile
+```
+Once the command finishes press `Enter` and then run the following inside the same directory:
+```
+$ mvn spring-boot:run
+```
+You can confirm you the backend is up and running accessing the endpoint [HAL explorer](http://localhost:8080/api) or the link http://localhost:8080/api/books.
+
+### Launch Frontend
+On the frontend side the dependencies is downloaded by running the following command inside the `<project-folder>/frontend/` directory:
+```
+$ yarn
+```
+After the command ends running execute statement below in the same directory:
+```
+$ yarn start
+```
+From your Browser now you can access the address http://localhost:3000 to start using this Web Application.
+
+## Documentation
+
+### Rich Internet Application Msc. Degree Subject Project
 ---
-### 40% of Overall Mark
+#### 40% of Overall Mark
 
 The purpose of this assignment is to demonstrate your ability to apply the learnings from the module to build a client / server single page Rich Internet Application. This application is expected to provide the following features:
 
