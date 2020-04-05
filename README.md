@@ -2,21 +2,25 @@
 This is a simple CRUD application as required as an assignment for the course of Rich Internet Application of the Msc. Degree in Software Engineering.
 
 ## Table of Contents
- - [Getting Started](#getting-started)
+- [Getting Started](#getting-started)
   - [Backend](#backend)
-   - [Download Dependencies](#backend-download-dependencies)
-   - [Launch](#backend-launch)
+    - [Download Dependencies](#backend-download-dependencies)
+    - [Launch](#backend-launch)
+  
   - [Frontend](#frontend)
-   - [Dependencies](#frontend-download-dependencies)
-   - [Launch](#frontend-launch)
- - [Documentation](#documentation)
+    - [Dependencies](#frontend-download-dependencies)
+    - [Launch](#frontend-launch)
+  
+- [Documentation](#documentation)
   - [Introduction](#introduction)
-   - [Backend Design](#backend-design)
+  
+  - [Backend Design](#backend-design)
     - [Entities Classes](#entities-classes)
     - [Swagger Documentation](#swagger-documentation)
     - [HAL Explorer](#hal-explorer)
     - [Test Cases](#test-cases)
-   - [Frontend Design](#frontend-design)
+  
+  - [Frontend Design](#frontend-design)
     - [Main Patterns](#main-patterns)
     - [Endpoints](#endpoints)
 
