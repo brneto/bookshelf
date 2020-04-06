@@ -21,7 +21,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.BasicJsonTester;
+import org.springframework.boot.test.json.JsonContent;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.CollectionModel;
@@ -31,6 +34,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureJsonTesters
 @TestMethodOrder(OrderAnnotation.class)
 class BookshelfApplicationTests {
 
@@ -42,6 +46,9 @@ class BookshelfApplicationTests {
   // https://rtmccormick.com/2017/07/30/solved-testing-patch-spring-boot-testresttemplate/
   @Autowired
   private TestRestTemplate restTemplate;
+
+  @Autowired
+  private BasicJsonTester json;
 
   private final Book book = new Book()
       .setTitle("Call of the wild")
@@ -93,13 +100,13 @@ class BookshelfApplicationTests {
     ResponseEntity<String> response =
         restTemplate.exchange(request, String.class);
     HttpStatus responseStatus = response.getStatusCode();
-    String responseContent = requireNonNull(response.getBody());
+    JsonContent<Object> responseContent = json.from(requireNonNull(response.getBody()));
 
-    System.out.println(responseContent);
 
     // then
     then(responseStatus).isEqualTo(BAD_REQUEST);
-    then(responseContent).isEqualTo("{\"errors\":["
+    then(responseContent).extractingJsonPathArrayValue("@.errors").hasSize(3);
+    then(responseContent.getJson()).isEqualTo("{\"errors\":["
         + "{"
         + "\"entity\":\"Book\","
         + "\"property\":\"author\","
@@ -240,11 +247,12 @@ class BookshelfApplicationTests {
     ResponseEntity<String> response =
         restTemplate.exchange(request, String.class);
     HttpStatus responseStatus = response.getStatusCode();
-    String responseContent = requireNonNull(response.getBody());
+    JsonContent<Object> responseContent = json.from(requireNonNull(response.getBody()));
 
     // then
     then(responseStatus).isEqualTo(BAD_REQUEST);
-    then(responseContent).isEqualTo("{\"errors\":["
+    then(responseContent).extractingJsonPathArrayValue("@.errors").hasSize(3);
+    then(responseContent.getJson()).isEqualTo("{\"errors\":["
         + "{"
         + "\"entity\":\"Book\","
         + "\"property\":\"author\","

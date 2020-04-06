@@ -10,9 +10,7 @@ import org.springframework.validation.Validator;
 public class BookValidator implements Validator {
 
   @Override
-  public boolean supports(Class<?> aClass) {
-    return Book.class.equals(aClass);
-  }
+  public boolean supports(Class<?> aClass) { return Book.class.equals(aClass); }
 
   @Override
   public void validate(Object o, Errors errors) {
