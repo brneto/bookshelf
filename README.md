@@ -270,6 +270,8 @@ In this section I list all the set of technologies used by this project sectione
 
 - [Babel](https://babeljs.io/)
 
+- [TypeScript](https://www.typescriptlang.org)
+
 - [Webpack](https://webpack.js.org/)
 
 - [Hard Source Webpack Plugin](https://github.com/mzgoddard/hard-source-webpack-plugin)

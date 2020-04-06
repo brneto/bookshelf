@@ -5,10 +5,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import org.springframework.validation.annotation.Validated;
 
 @Entity
 public class Book {
@@ -32,6 +32,7 @@ public class Book {
   @NotBlank(message = "Language cannot be empty")
   private String language;
 
+  @Lob
   private String description;
 
   @ManyToOne

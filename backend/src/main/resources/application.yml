@@ -1,5 +1,6 @@
 spring:
   h2.console.enabled: on
+  datasource.platform: h2
   jpa:
     show-sql: on
     properties.hibernate:

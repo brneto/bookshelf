@@ -32,10 +32,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureJsonTesters
 @TestMethodOrder(OrderAnnotation.class)
+@ActiveProfiles("test")
 class BookshelfApplicationTests {
 
   private final URI baseUri = URI.create("/api/books/");
