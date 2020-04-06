@@ -16,6 +16,9 @@ This is a full stack CRUD application as a required assignment for the course of
   - [Frontend Design](#frontend-design)
     - [UI Patterns](#ui-patterns)
     - [Endpoints](#endpoints)
+- [Technologies](#technologies)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
 
 ## Getting Started
 To use this application is recommended start the backend before the frontend, otherwise the frontend can not work properly or present unexpected behaviour.
@@ -213,17 +216,29 @@ In this section I list all the set of technologies used by this project sectione
 
 ### Backend
 [Maven](https://maven.apache.org)
+
 [Java 1.8](https://www.java.com)
+
 [Spring Framework](https://spring.io/projects/spring-framework)
+
 [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+
 [Spring Data Rest](https://spring.io/projects/spring-data-rest)
+
 [HttpClient](http://hc.apache.org/httpcomponents-client-ga/index.html)
+
 [HAL Explorer](https://github.com/toedter/hal-explorer)
+
 [Swagger2](http://springfox.github.io/springfox/)
+
 [Swagger UI](http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui)
+
 [Spring Boot Devtools](https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3)
+
 [H2 Database](http://h2database.com)
+
 [Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing)
+
 [Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/docs/current/maven-plugin/)
 
 ### Frontend
