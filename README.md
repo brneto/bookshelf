@@ -177,4 +177,4 @@ If you decide to try it just open from your browser the link http://localhost:80
 <!-- image references -->
 [main-page]: ./images/main-page.png "Main page screenshot"
 [edit-page]: ./images/create-edit-page.png "Create or Edit page screenshot"
-[entities-diagram]: ./images/entities-diagram.png "Entities Class Diagram"
+[entities-diagram]: ./images/entities-diagram.png "Entities class diagram"
