@@ -14,7 +14,7 @@ This is a full stack CRUD application as a required assignment for the course of
     - [REST Validation](#rest-validation)
     - [HAL Explorer](#hal-explorer)    
   - [Frontend Design](#frontend-design)
-    - [Main Patterns](#main-patterns)
+    - [UI Patterns](#ui-patterns)
     - [Endpoints](#endpoints)
 
 ## Getting Started
@@ -57,7 +57,7 @@ For this application I did put very effort on styling so the table page, icons a
 ![Create or Edit page screenshot][edit-page]
 
 ### Backend Design
-The section will describe in more depth the design, endpoint and documentation adopted on this part of the app.
+This section will describe in more depth the design, endpoint and documentation adopted on this part of the app.
 
 #### Entities Classes
 Here I created basically two Entities. One and the main one *Book Entity Class* and another *Seller Entity Class*. The relationship between then is represented by the image below:
@@ -91,7 +91,7 @@ private String sellerName;
 #### Swagger Documentation
 To expose the endpoint documentation I used [Swagger](https://springfox.github.io/springfox). To do that a created a *Spring Java Config* specific to tweak some custom changes on *Swagger Docket*. Below the snippet code from that class:
 ```java
-Configuration
+@Configuration
 @EnableSwagger2WebMvc
 @Import(SpringDataRestConfiguration.class)
 public class SwaggerConfig {
@@ -116,6 +116,7 @@ public class SwaggerConfig {
   }
 }
 ```
+To have access to the swagger documentation of this project access the address http://localhost:8080/swagger-ui.html.
 
 #### Test Cases
 All the test for the backend was implemented using [Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing). To setup the test class I've just created a POJO class inside the Maven test folder and added at class level the following annotations:
@@ -173,6 +174,94 @@ public void configureValidatingRepositoryEventListener(ValidatingRepositoryEvent
 An additional tool (not request by the project) I added to my project was [HAL Explorer](https://github.com/toedter/hal-explorer). This piece of sofware allows us to browse and explore HAL and HAL-FORMS based RESTful Hypermedia APIs. With this tool is much easier to test my api, create some requests, check the responses and so on. It's like a onboaded POSTMAN by specificaly to the API of my own application.
 
 If you decide to try it just open from your browser the link http://localhost:8080/api once you backend application is up and running. If you don't know it give yourself a try. It's very interesting!
+
+### Frontend Design
+This section will describe in more depth the main designs adopted on the UI of this app
+
+#### UI Patterns
+Despite the fact this is a very small app, to better comprehend the code knowing the design applied is important. The most relevent design approach I have adopted to this Single Page Application (SPA) was [REDUX](https://redux.js.org) together with [Redux-Saga](https://redux-saga.js.org/).
+
+Basically, a Redux store containing a state like this to save my backend call data:
+```javascript
+{
+  byId: {
+    1: {
+      ​​​id: 1,
+      author: "asdf",
+      description: "asdf",
+      ​​language: "asdf",
+      ​​​pages: 1,
+      ​​​publisher: "asdf",
+      ​title: "fads"
+    }
+  }
+  idList: {
+    ids: [1],
+    fetchStatus: "resolved",
+    error: null
+  }
+}
+```
+
+Addionally, the job of the `Redux-Saga` is deal with the side effects of the application in this case the data fetching from the backend. Which, by the way, I have created an special API to concentrate all the call to the backend related to Books. As a side note, this special API created has the help of [Axios](https://github.com/axios/axios).
+
+#### Endpoints
+In this project despite the backend has two endpoints, Books and Sellers, for the frontend I've just used the one for Books.
+
+## Technologies
+In this section I list all the set of technologies used by this project sectioned by backend and frontend.
+
+### Backend
+[Maven](https://maven.apache.org)
+[Java 1.8](https://www.java.com)
+[Spring Framework](https://spring.io/projects/spring-framework)
+[Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+[Spring Data Rest](https://spring.io/projects/spring-data-rest)
+[HttpClient](http://hc.apache.org/httpcomponents-client-ga/index.html)
+[HAL Explorer](https://github.com/toedter/hal-explorer)
+[Swagger2](http://springfox.github.io/springfox/)
+[Swagger UI](http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui)
+[Spring Boot Devtools](https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3)
+[H2 Database](http://h2database.com)
+[Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing)
+[Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/docs/current/maven-plugin/)
+
+### Frontend
+:atom_symbol: [React](https://reactjs.org/)
+
+:woman_singer: [Emotion](https://emotion.sh/)
+
+:gift: [React Router v4](https://github.com/ReactTraining/react-router)
+
+:electron: [Redux](https://redux.js.org/)
+
+:gem: [Immer](https://github.com/mweststrate/immer)
+
+:card_file_box: [Normalizr](https://github.com/paularmstrong/normalizr)
+
+:punch: [Redux Actions](https://redux-actions.js.org/)
+
+:atom: [Redux Saga](https://redux-saga.js.org/)
+
+:wavy_dash: [Connected React Router](https://github.com/supasate/connected-react-router)
+
+:running: [Express](http://expressjs.com/)
+
+:package: [ES Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+[ESLint](https://eslint.org/)
+
+[Stylelint](https://stylelint.io/)
+
+[Babel](https://babeljs.io/)
+
+[Webpack](https://webpack.js.org/)
+
+[Hard Source Webpack Plugin](https://github.com/mzgoddard/hard-source-webpack-plugin)
+
+[Redux Logger](https://github.com/evgenyrodionov/redux-logger)
+
+[Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 
 <!-- image references -->
 [main-page]: ./images/main-page.png "Main page screenshot"
