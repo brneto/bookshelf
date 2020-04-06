@@ -10,8 +10,9 @@ This is a full stack CRUD application as a required assignment for the course of
   - [Backend Design](#backend-design)
     - [Entities Classes](#entities-classes)
     - [Swagger Documentation](#swagger-documentation)
-    - [HAL Explorer](#hal-explorer)
     - [Test Cases](#test-cases)
+    - [REST Validation](#rest-validation)
+    - [HAL Explorer](#hal-explorer)    
   - [Frontend Design](#frontend-design)
     - [Main Patterns](#main-patterns)
     - [Endpoints](#endpoints)
@@ -55,42 +56,125 @@ For this application I did put very effort on styling so the table page, icons a
 
 ![Create or Edit page screenshot][edit-page]
 
-### Rich Internet Application Msc. Degree Subject Project
----
-#### 40% of Overall Mark
+### Backend Design
+The section will describe in more depth the design, endpoint and documentation adopted on this part of the app.
 
-The purpose of this assignment is to demonstrate your ability to apply the learnings from the module to build a client / server single page Rich Internet Application. This application is expected to provide the following features:
+#### Entities Classes
+Here I created basically two Entities. One and the main one *Book Entity Class* and another *Seller Entity Class*. The relationship between then is represented by the image below:
 
-+ Expose the Database tables as Entities within a Java based server application using Spring Data JPA (MySQL Database schema defined in Databases Module)
+![Entities class diagram][entities-diagram]
 
-  + Support Create, Retrieve, Update and Delete (CRUD) operations on the Database via a JpaRepository.
+For the Book entity the fields `title`, `author`, `publisher`, `pages` and `language` should not be empty. Therefore to pages it should not be 0 or less. I enforced this behaviour from the backend side with the snippet code:
+```java
+@NotBlank(message = "Title cannot be empty")
+private String title;
 
-  + Support Search functionality of the Entities using at **least two** derived queries.
+@NotBlank(message = "Author cannot be empty")
+private String author;
 
-  +	Support Sorting and Pagination at the Repository level.
+@NotBlank(message = "Publisher cannot be empty")
+private String publisher;
 
-+ Expose the Entities to a Web client via REST resources built with Spring Web MVC.
+@Positive
+private Integer pages;
 
-   + Support full CRUD operations for the resources.
+@NotBlank(message = "Language cannot be empty")
+private String language;
+```
 
-   + Support Validation on Create and Update operations.
+For the Seller entity the only required field is `seller name` which is enforced by the code:
+```java
+@NotBlank(message = "Seller Name cannot be empty")
+private String sellerName;
+```
 
-   + Demonstrate proper use of HttpStatus Codes and Location headers.
+#### Swagger Documentation
+To expose the endpoint documentation I used [Swagger](https://springfox.github.io/springfox). To do that a created a *Spring Java Config* specific to tweak some custom changes on *Swagger Docket*. Below the snippet code from that class:
+```java
+Configuration
+@EnableSwagger2WebMvc
+@Import(SpringDataRestConfiguration.class)
+public class SwaggerConfig {
+  @Bean
+  public Docket bookDocket() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .apiInfo(apiInfo())
+        .tags(
+            new Tag("Book Entity", "Repository for Book entities"),
+            new Tag("Seller Entity", "Repository for Seller entities"))
+        .select()
+        .apis(RequestHandlerSelectors.any())
+        .paths(regex("/api/(books|sellers).*"))
+        .build();
+  }
+  private ApiInfo apiInfo() {
+    return new ApiInfoBuilder()
+        .title("Book Shelf API")
+        .description("Rich Internet Application subject project.")
+        .version("0.0.1")
+        .build();
+  }
+}
+```
 
-   + Demonstrate proper use of Exceptions to control returned HTTP status codes.
+#### Test Cases
+All the test for the backend was implemented using [Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing). To setup the test class I've just created a POJO class inside the Maven test folder and added at class level the following annotations:
+```java
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureJsonTesters
+@TestMethodOrder(OrderAnnotation.class)
+```
+Because I wanted the test run in a certain order I have also add on method level of each test the annotations:
+```java
+@Test @Order(<order-number>)
+```
 
-   + All REST endpoints should be documented using Swagger 2 including correct use of the @ApiModel and @ApiModelProperty annotations. You should also override the default API_INFO to display correct details in Swagger.
+Below I present the list of test cases implemented by the class `BookshelfApplicationTests`:
+1. shouldContextLoads
+   - The simplest one, just test the load of the spring boot itself.
+2. shouldHaveNoBookWithGetAll
+   - Test the REST GET all call when no books has been created yet. It does that checking if the json object create return a list of empty items.
+3. shouldFailCreateABookWithPost
+   - Test the REST POST call with Book payload with some fields of the json object hasn't been set. It tests for a fail response with HTTP Error Code `400 Bad Request`.
+4. shouldCreateABookWithPost
+   - Test a successful REST POST call with a Book as the payload. It verifies if the response json object match with the request payload fields.
+5. shouldHaveOneBookWithGetAll
+   - Test the REST GET all call. It checks if the response Header is `200 OK` and if the returned json list is not empty and his size bigger than 0.
+6. shouldReturnOneBookWithGet
+   - Test the REST GET one call. It checks if the response Header is `200 OK` and if the returned json object matchs every field with the Book object previously create the POST call.
+7. shouldUpdateExistingBookWithPatch
+   - Test the REST PATCH call. Althought it send a payload with just title parameter been set, it checks if the response Header is `200 OK` and if all the field but the title still matching the previously createdBook object.
+8. shouldFailReplaceExistingBookWithPut
+   - Test the REST PUT call to send as payload with just title parameter set. It checks if the response Header is `400 Bad Request` and expect for an Errors object of size 3 and matching json String with the fields missing.
+9.  shouldReplaceExistingBookWithPut
+    - Test a successful REST PUT call with only the required fields. It checks if the response Header is `200 OK` and test if all fields but description match the PUT payload. The description is matched for null as a prove that in the case of PUT the object is replace by a need one which doesn't happen in the PATCH call test.
+10. shouldDeleteExistingBookWithDelete
+    - Test the REST DELETE one call of the object created. It checks if the response Header is `204 No Content`.
+11. shouldHaveNoBookWithLastGetAll
+    - Test the REST GET all call. Just reproduce the same validation as the test `shouldHaveNoBookWithGetAll`. The goal here is just verify if the previous DELETE call has actually deleted the Book object created.
 
-   + Suite of POSTMAN tests demonstrating each of the REST Endpoints.
+#### REST Validation
+For this project I have used the [Spring Boot Data Rest](https://spring.io/projects/spring-data-rest) so in this case to validate the json payload and response a Errors object presenting each required field missed the configuration for that is a little different from when using just [Spring Boot MVC](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc).
 
-+ Create a React.js, Single Page Application to provide CRUD operations against a subset of the Tables (Stock management tables).
+Before anything I created to special POJO classes which implements the Validator interface. Those class were `BookValidator` and `SellerValidator`. Inside these classes I test each field of the objects to see if the received object is following que requirements and when this happens I fill a special object called `Errors` with this information.
 
-  + This should be modelled as a Master/Details type view, whereby the product summary is displayed in a list/table view.  Selecting an item in the table will show the full details in a separate pane.
+Once that is done the last step is just link this validator to each Data Rest event I to validate before. This done by a DataRestConfig class I have created which implements the Interface `RepositoryRestConfigurer` and *Override* the method `configureValidatingRepositoryEventListener`. Below the snippet code of this configuration:
+```java
+@Override
+public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
+  v.addValidator("beforeSave", new BookValidator()),
+   .addValidator("beforeCreate", new BookValidator()),
+   .addValidator("beforeSave", new SellerValidator()),
+   .addValidator("beforeCreate", new SellerValidator());
+}
+```
 
-  + Support the Create/Update/Delete operations either through buttons in the detailed pane, or through icons in the table or a mix of both.
+#### HAL Explorer
+An additional tool (not request by the project) I added to my project was [HAL Explorer](https://github.com/toedter/hal-explorer). This piece of sofware allows us to browse and explore HAL and HAL-FORMS based RESTful Hypermedia APIs. With this tool is much easier to test my api, create some requests, check the responses and so on. It's like a onboaded POSTMAN by specificaly to the API of my own application.
 
-  + Allow Sorting and Filtering (Search by at **least two** properties) of the list/table view.
+If you decide to try it just open from your browser the link http://localhost:8080/api once you backend application is up and running. If you don't know it give yourself a try. It's very interesting!
 
 <!-- image references -->
 [main-page]: ./images/main-page.png "Main page screenshot"
 [edit-page]: ./images/create-edit-page.png "Create or Edit page screenshot"
+[entities-diagram]: ./images/entities-diagram.png "Entities Class Diagram"

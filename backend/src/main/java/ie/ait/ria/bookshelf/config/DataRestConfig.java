@@ -25,10 +25,10 @@ public class DataRestConfig implements RepositoryRestConfigurer {
 
   @Override
   public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
-    v.addValidator("beforeSave", new BookValidator());
-    v.addValidator("beforeCreate", new BookValidator());
-    v.addValidator("beforeSave", new SellerValidator());
-    v.addValidator("beforeCreate", new SellerValidator());
+    v.addValidator("beforeSave", new BookValidator())
+     .addValidator("beforeCreate", new BookValidator())
+     .addValidator("beforeSave", new SellerValidator())
+     .addValidator("beforeCreate", new SellerValidator());
   }
 
 }
