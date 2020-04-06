@@ -215,68 +215,68 @@ In this project despite the backend has two endpoints, Books and Sellers, for th
 In this section I list all the set of technologies used by this project sectioned by backend and frontend.
 
 ### Backend
-[Maven](https://maven.apache.org)
+- [Maven](https://maven.apache.org)
 
-[Java 1.8](https://www.java.com)
+- [Java 1.8](https://www.java.com)
 
-[Spring Framework](https://spring.io/projects/spring-framework)
+- [Spring Framework](https://spring.io/projects/spring-framework)
 
-[Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 
-[Spring Data Rest](https://spring.io/projects/spring-data-rest)
+- [Spring Data Rest](https://spring.io/projects/spring-data-rest)
 
-[HttpClient](http://hc.apache.org/httpcomponents-client-ga/index.html)
+- [HttpClient](http://hc.apache.org/httpcomponents-client-ga/index.html)
 
-[HAL Explorer](https://github.com/toedter/hal-explorer)
+- [HAL Explorer](https://github.com/toedter/hal-explorer)
 
-[Swagger2](http://springfox.github.io/springfox/)
+- [Swagger2](http://springfox.github.io/springfox/)
 
-[Swagger UI](http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui)
+- [Swagger UI](http://springfox.github.io/springfox/docs/current/#springfox-swagger-ui)
 
-[Spring Boot Devtools](https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3)
+- [Spring Boot Devtools](https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3)
 
-[H2 Database](http://h2database.com)
+- [H2 Database](http://h2database.com)
 
-[Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing)
+- [Spring Boot Test](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing)
 
-[Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/docs/current/maven-plugin/)
+- [Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/docs/current/maven-plugin/)
 
 ### Frontend
-:atom_symbol: [React](https://reactjs.org/)
+- :atom_symbol: [React](https://reactjs.org/)
 
-:woman_singer: [Emotion](https://emotion.sh/)
+- :woman_singer: [Emotion](https://emotion.sh/)
 
-:gift: [React Router v4](https://github.com/ReactTraining/react-router)
+- :gift: [React Router v4](https://github.com/ReactTraining/react-router)
 
-:electron: [Redux](https://redux.js.org/)
+- :electron: [Redux](https://redux.js.org/)
 
-:gem: [Immer](https://github.com/mweststrate/immer)
+- :gem: [Immer](https://github.com/mweststrate/immer)
 
-:card_file_box: [Normalizr](https://github.com/paularmstrong/normalizr)
+- :card_file_box: [Normalizr](https://github.com/paularmstrong/normalizr)
 
-:punch: [Redux Actions](https://redux-actions.js.org/)
+- :punch: [Redux Actions](https://redux-actions.js.org/)
 
-:atom: [Redux Saga](https://redux-saga.js.org/)
+- :atom: [Redux Saga](https://redux-saga.js.org/)
 
-:wavy_dash: [Connected React Router](https://github.com/supasate/connected-react-router)
+- :wavy_dash: [Connected React Router](https://github.com/supasate/connected-react-router)
 
-:running: [Express](http://expressjs.com/)
+- :running: [Express](http://expressjs.com/)
 
-:package: [ES Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+- :package: [ES Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
 
-[ESLint](https://eslint.org/)
+- [ESLint](https://eslint.org/)
 
-[Stylelint](https://stylelint.io/)
+- [Stylelint](https://stylelint.io/)
 
-[Babel](https://babeljs.io/)
+- [Babel](https://babeljs.io/)
 
-[Webpack](https://webpack.js.org/)
+- [Webpack](https://webpack.js.org/)
 
-[Hard Source Webpack Plugin](https://github.com/mzgoddard/hard-source-webpack-plugin)
+- [Hard Source Webpack Plugin](https://github.com/mzgoddard/hard-source-webpack-plugin)
 
-[Redux Logger](https://github.com/evgenyrodionov/redux-logger)
+- [Redux Logger](https://github.com/evgenyrodionov/redux-logger)
 
-[Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
+- [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 
 <!-- image references -->
 [main-page]: ./images/main-page.png "Main page screenshot"
