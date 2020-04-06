@@ -3,8 +3,8 @@ This is a full stack CRUD application as a required assignment for the course of
 
 ## Table of Contents
 - [Getting Started](#getting-started)
-  - [Backend](#launch-backend)
-  - [Frontend](#launch-frontend)
+  - [Backend](#running-backend)
+  - [Frontend](#running-frontend)
 - [Documentation](#documentation)
   - [Introduction](#introduction)
   - [Backend Design](#backend-design)
@@ -19,8 +19,8 @@ This is a full stack CRUD application as a required assignment for the course of
 ## Getting Started
 To use this application is recommended start the backend before the frontend, otherwise the frontend can not work properly or present unexpected behaviour.
 
-### Launch Backend
-Before start running the backend application first it's needed to download the project dependencies. This is done executing the command below inside the `<project-folder>/backend/` directory:
+### Running Backend
+Given you have already installed the [Apache Maven](https://maven.apache.org/install.html), before start running the backend application first it's needed to download the project dependencies. This is done executing the command below inside the `<project-folder>/backend/` directory:
 ```
 $ mvn test-compile
 ```
@@ -30,8 +30,8 @@ $ mvn spring-boot:run
 ```
 You can confirm you the backend is up and running accessing the [HAL explorer](https://github.com/toedter/hal-explorer) on the link http://localhost:8080/api.
 
-### Launch Frontend
-On the frontend side the dependencies is downloaded by running the following command inside the `<project-folder>/frontend/` directory:
+### Running Frontend
+Given you have already installed the [Yarn - Package Manager](https://classic.yarnpkg.com/en/docs/install/), on the frontend side the dependencies is downloaded by running the following command inside the `<project-folder>/frontend/` directory:
 ```
 $ yarn
 ```
@@ -42,6 +42,18 @@ $ yarn start
 From your Browser now you can access the address http://localhost:3000 to start using this Web Application.
 
 ## Documentation
+### Introduction
+The application created to this project is just a Book Shelf manager.
+
+You can add a new Book, edit an existing one or delete it if you want to. Additionaly to that, you can sort the list of Book *By Author or Title* or you can filter in the list by the same fields.
+
+This app requires all fields in registration and editition are filled properly so the frontend side do a validation of them all and only allows the submittion after all fields has been validated and approved.
+
+For this application I did put very effort on styling so the table page, icons and buttons are very basic.
+
+![Main page screenshot][main-page]
+
+![Create or Edit page screenshot][edit-page]
 
 ### Rich Internet Application Msc. Degree Subject Project
 ---
@@ -79,3 +91,6 @@ The purpose of this assignment is to demonstrate your ability to apply the learn
 
   + Allow Sorting and Filtering (Search by at **least two** properties) of the list/table view.
 
+<!-- image references -->
+[main-page]: ./images/main-page.png "Main page screenshot"
+[edit-page]: ./images/create-edit-page.png "Create or Edit page screenshot"
