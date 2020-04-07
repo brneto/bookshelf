@@ -1,7 +1,7 @@
 package ie.ait.ria.bookshelf.config;
 
-import ie.ait.ria.bookshelf.model.Book;
-import ie.ait.ria.bookshelf.model.Seller;
+import ie.ait.ria.bookshelf.domain.Book;
+import ie.ait.ria.bookshelf.domain.Seller;
 import ie.ait.ria.bookshelf.validator.BookValidator;
 import ie.ait.ria.bookshelf.validator.SellerValidator;
 import org.springframework.context.annotation.Configuration;

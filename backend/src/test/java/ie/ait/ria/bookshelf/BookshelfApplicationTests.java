@@ -11,7 +11,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.ait.ria.bookshelf.model.Book;
+import ie.ait.ria.bookshelf.domain.Book;
 import ie.ait.ria.bookshelf.repository.BookRepository;
 import java.net.URI;
 import java.util.Collection;

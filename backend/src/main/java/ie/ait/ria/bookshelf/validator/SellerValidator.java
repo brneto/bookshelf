@@ -3,7 +3,7 @@ package ie.ait.ria.bookshelf.validator;
 import static java.lang.String.format;
 import static org.springframework.util.StringUtils.isEmpty;
 
-import ie.ait.ria.bookshelf.model.Seller;
+import ie.ait.ria.bookshelf.domain.Seller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

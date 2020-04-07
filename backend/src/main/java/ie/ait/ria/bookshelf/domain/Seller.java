@@ -1,4 +1,4 @@
-package ie.ait.ria.bookshelf.model;
+package ie.ait.ria.bookshelf.domain;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
