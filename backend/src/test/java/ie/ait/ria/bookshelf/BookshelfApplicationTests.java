@@ -44,14 +44,6 @@ class BookshelfApplicationTests {
   private final HashMap<String, Object> bookUpdater = new HashMap<>();
   private final Long bookIdInTest = 1L;
   private final URI bookUriInTest = baseUri.resolve(bookIdInTest.toString());
-
-  // https://rtmccormick.com/2017/07/30/solved-testing-patch-spring-boot-testresttemplate/
-  @Autowired
-  private TestRestTemplate restTemplate;
-
-  @Autowired
-  private BasicJsonTester json;
-
   private final Book book = new Book()
       .setTitle("Call of the wild")
       .setAuthor("Jack London")
@@ -64,6 +56,13 @@ class BookshelfApplicationTests {
               + "Buck is snatched away from his peaceful home and brought to the "
               + "harsh and bitter Yukon to become a sled dog."
       );
+
+  // https://rtmccormick.com/2017/07/30/solved-testing-patch-spring-boot-testresttemplate/
+  @Autowired
+  private TestRestTemplate restTemplate;
+
+  @Autowired
+  private BasicJsonTester json;
 
   @Test
   void shouldContextLoads(@Autowired BookRepository bookRepository) {
@@ -236,6 +235,7 @@ class BookshelfApplicationTests {
   @Test @Order(7)
   void shouldFailReplaceExistingBookWithPut(@Autowired ObjectMapper objectMapper)
       throws JsonProcessingException {
+
     // given
     bookUpdater.put("title", "Pollyana");
 
