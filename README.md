@@ -209,7 +209,7 @@ Basically, a Redux store containing a state like this to save my backend call da
 Addionally, the job of the `Redux-Saga` is deal with the side effects of the application in this case the data fetching from the backend. Which, by the way, I have created an special API to concentrate all the call to the backend related to Books. As a side note, this special API created has the help of [Axios](https://github.com/axios/axios).
 
 #### Endpoints
-In this project despite the backend has two endpoints, Books and Sellers, for the frontend I've just used the one for Books.
+In this project despite the backend has two endpoints, **Books** and **Sellers**, for the frontend I've just used the one for **Books**.
 
 ## Technologies
 In this section I list all the set of technologies used by this project sectioned by backend and frontend.
