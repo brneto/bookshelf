@@ -69,7 +69,7 @@ const BookTable = ({
     [filter, setFilter] = useState(''),
     handleSortBy = e => setSortBy(e.target.value),
     handleFilterBy = e => setFilterBy(e.target.value),
-    handleClear = () => setFilter(''),
+    handleClear = () => setFilter('') || setFilterBy(''),
     handleFilterChange = e => setFilter(e.target.value);
 
   const
@@ -81,12 +81,13 @@ const BookTable = ({
         return 0;
       };
 
-      if (sortBy) return books.sort(compare(sortBy));
+      if (sortBy) return [...books].sort(compare(sortBy));
 
       return books;
     },
     filterBooks = books => {
-      const createFilter = field => book => book[field].includes(filter);
+      const createFilter = (field) =>
+        book => book[field].toUpperCase().includes(filter.toUpperCase());
 
       return filterBy && filter ? books.filter(createFilter(filterBy)) : books;
     };
@@ -97,7 +98,7 @@ const BookTable = ({
 
   if (status.isRejected) render = (
     <p>
-      The server failed with the message: {error.message}.<br />
+      The server failed with the message: {error.message}.&nbsp;
       <button onClick={handleRetry}>Try again</button>
     </p>
   );
